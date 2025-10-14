@@ -49,11 +49,18 @@ function Step1() {
           href="/form?step=1"
           className="flex gap-x-2 rounded bg-red-700 px-6 py-3 text-sm font-medium text-white shadow hover:bg-red-800 focus:outline-none focus:ring active:bg-red-500 sm:w-auto"
         >
-          <img
-            src="/venetian-mask.svg"
-            alt="Mask Icon"
-            className="w-5 h-5"
-          />
+          <svg 
+            xmlns="http://www.w3.org/2000/svg" 
+            className="w-5 h-5 text-white"
+            viewBox="0 0 24 24" 
+            fill="none" 
+            stroke="currentColor" 
+            strokeWidth="2" 
+            strokeLinecap="round" 
+            strokeLinejoin="round"
+          >
+            <path d="M2 12a5 5 0 0 0 5 5 8 8 0 0 1 5 2 8 8 0 0 1 5-2 5 5 0 0 0 5-5V7h-5a8 8 0 0 0-5 2 8 8 0 0 0-5-2H2Z"/><path d="M6 11c1.5 0 3 .5 3 2-2 0-3 0-3-2Z"/><path d="M18 11c-1.5 0-3 .5-3 2 2 0 3 0 3-2Z"/>
+          </svg>
           Isi sebagai anonim
         </Link>
       </div>
@@ -95,7 +102,7 @@ function Step2() {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col gap-y-6 px-4 lg:px-16">
+    <form onSubmit={handleSubmit} className="flex flex-col gap-y-6 px-4 lg:px-16 my-6">
       {/* Form Gejala Utama */}
       <FormGejalaUtama formData={formData} setFormData={setFormData} />
       
@@ -142,10 +149,10 @@ function FormGejalaUtama({ formData, setFormData }: FormProps) {
   return (
     <div
       id="form-gejala-utama"
-      className="block w-full px-4 md:px-16 py-10 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700"
+      className="block w-full px-4 md:px-16 py-10 bg-white border border-gray-200 rounded-lg shadow"
     >
       <div className="flex w-full justify-between items-center py-4">
-        <h3 className="text-3xl font-bold tracking-tight text-red-700 dark:text-white">
+    <h3 className="text-3xl font-bold tracking-tight text-red-700">
           Gejala Utama
         </h3>
         <a
@@ -166,17 +173,17 @@ function FormGejalaUtama({ formData, setFormData }: FormProps) {
           <div className="flex gap-x-8 items-center">
             <img src="/sick.png" alt="Question" className="w-16" />
             <label className="flex flex-col">
-              <h5 className="mb-2 text-xl font-medium tracking-tight text-gray-900 dark:text-white">
+              <h5 className="mb-2 text-xl font-medium tracking-tight text-gray-900">
                 Apakah anda merasakan demam?
               </h5>
-              <p className="font-normal text-gray-700 dark:text-gray-400">
+              <p className="font-normal text-gray-700">
                 Jika suhu tubuh anda di atas 38°C, maka anda seharusnya merasakan demam
               </p>
             </label>
           </div>
-          <ul className="items-center text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg sm:flex dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+          <ul className="items-center text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg sm:flex">
             {['Iya', 'Tidak'].map((choice, index) => (
-              <li key={choice} className="w-full border-b border-gray-200 sm:border-b-0 sm:border-r dark:border-gray-600">
+              <li key={choice} className="w-full border-b border-gray-200 sm:border-b-0 sm:border-r">
                 <div className="flex items-center px-8">
                   <input
                     id={`kdema-${index}`}
@@ -187,7 +194,7 @@ function FormGejalaUtama({ formData, setFormData }: FormProps) {
                     onChange={(e) => setFormData({ ...formData, KDEMA: e.target.value })}
                     className="w-4 h-4 text-red-600 bg-gray-100 border-gray-300 focus:ring-red-500"
                   />
-                  <label htmlFor={`kdema-${index}`} className="w-full py-3 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">
+                  <label htmlFor={`kdema-${index}`} className="w-full py-3 ms-2 text-sm font-medium text-gray-900">
                     {choice}
                   </label>
                 </div>
@@ -202,10 +209,10 @@ function FormGejalaUtama({ formData, setFormData }: FormProps) {
             <div className="flex gap-x-8 items-center">
               <img id="ddema-img" src="/schedule.png" alt="Question" className="w-16" />
               <label className="flex flex-col">
-                <h5 className="mb-2 text-xl font-medium tracking-tight text-gray-900 dark:text-white">
+                <h5 className="mb-2 text-xl font-medium tracking-tight text-gray-900">
                   Durasi demam (hari)
                 </h5>
-                <p className="font-normal text-gray-700 dark:text-gray-400">
+                <p className="font-normal text-gray-700">
                   Berapa lama Anda merasakan demam?
                 </p>
               </label>
@@ -227,10 +234,10 @@ function FormGejalaUtama({ formData, setFormData }: FormProps) {
             <div className="flex gap-x-8 items-center">
               <img id="suhun-img" src="/thermometer.png" alt="Question" className="w-16" />
               <label className="flex flex-col">
-                <h5 className="mb-2 text-xl font-medium tracking-tight text-gray-900 dark:text-white">
+                <h5 className="mb-2 text-xl font-medium tracking-tight text-gray-900">
                   Suhu saat ini (°C)
                 </h5>
-                <p className="font-normal text-gray-700 dark:text-gray-400">
+                <p className="font-normal text-gray-700">
                   Anda dapat mengecek suhu tubuh Anda dengan termometer
                 </p>
               </label>
@@ -268,10 +275,10 @@ function FormGejalaTambahan({ formData, setFormData }: FormProps) {
   return (
     <div
       id="form-gejala-tambahan"
-      className="block w-full px-4 md:px-16 py-10 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700"
+      className="block w-full px-4 md:px-16 py-10 bg-white border border-gray-200 rounded-lg shadow"
     >
       <div className="flex w-full justify-between items-center py-4">
-        <h3 className="text-3xl font-bold tracking-tight text-red-700 dark:text-white">
+        <h3 className="text-3xl font-bold tracking-tight text-red-700">
           Gejala Tambahan
         </h3>
         <a
@@ -295,10 +302,10 @@ function FormGejalaTambahan({ formData, setFormData }: FormProps) {
                 <div className="flex gap-x-8 items-center">
                   <img src={symptom.img} alt="Question" className="w-16" />
                   <label className="flex flex-col">
-                    <h5 className="mb-2 text-xl font-medium tracking-tight text-gray-900 dark:text-white">
+                    <h5 className="mb-2 text-xl font-medium tracking-tight text-gray-900">
                       {symptom.title}
                     </h5>
-                    <p className="font-normal text-gray-700 dark:text-gray-400">
+                    <p className="font-normal text-gray-700">
                       {symptom.desc}
                     </p>
                   </label>
@@ -349,9 +356,9 @@ function FormUjiLab({ formData, setFormData }: FormProps) {
   return (
     <div
       id="form-uji-lab"
-      className="block w-full px-4 md:px-16 py-10 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700"
+      className="block w-full px-4 md:px-16 py-10 bg-white border border-gray-200 rounded-lg shadow"
     >
-      <h3 className="mb-10 text-3xl font-bold tracking-tight text-red-700 dark:text-white">
+      <h3 className="mb-10 text-3xl font-bold tracking-tight text-red-700">
         Uji Laboratorium
       </h3>
       
@@ -360,10 +367,10 @@ function FormUjiLab({ formData, setFormData }: FormProps) {
           <div className="flex gap-x-8 items-center">
             <img src="/blood-analysis.png" alt="Question" className="w-16" />
             <label className="flex flex-col">
-              <h5 className="mb-2 text-xl font-medium tracking-tight text-gray-900 dark:text-white">
+              <h5 className="mb-2 text-xl font-medium tracking-tight text-gray-900">
                 Apakah anda sudah melakukan uji darah di Laboratorium?
               </h5>
-              <p className="font-normal text-gray-700 dark:text-gray-400">
+              <p className="font-normal text-gray-700">
                 Uji darah dapat dilakukan untuk mengetahui kondisi tubuh Anda
               </p>
             </label>
@@ -396,10 +403,10 @@ function FormUjiLab({ formData, setFormData }: FormProps) {
             <div className="flex gap-x-8 items-center">
               <img id="jwbcs-img" src="/white-blood-cell.png" alt="Question" className="w-16" />
               <label className="flex flex-col">
-                <h5 className="mb-2 text-xl font-medium tracking-tight text-gray-900 dark:text-white">
+                <h5 className="mb-2 text-xl font-medium tracking-tight text-gray-900">
                   Jumlah WBC (sel darah putih) [×10^3/uL]
                 </h5>
-                <p className="font-normal text-gray-700 dark:text-gray-400">
+                <p className="font-normal text-gray-700">
                   Jumlah sel darah putih yang normal berkisar antara 4.5-11.0 ×10^3/uL
                 </p>
               </label>
@@ -422,10 +429,10 @@ function FormUjiLab({ formData, setFormData }: FormProps) {
             <div className="flex gap-x-8 items-center">
               <img id="hemog-img" src="/red-blood-cells.png" alt="Question" className="w-16" />
               <label className="flex flex-col">
-                <h5 className="mb-2 text-xl font-medium tracking-tight text-gray-900 dark:text-white">
+                <h5 className="mb-2 text-xl font-medium tracking-tight text-gray-900">
                   Hemoglobin [g/dL]
                 </h5>
-                <p className="font-normal text-gray-700 dark:text-gray-400">
+                <p className="font-normal text-gray-700">
                   Hemoglobin adalah protein yang membawa oksigen dalam sel darah merah
                 </p>
               </label>
@@ -450,10 +457,10 @@ function FormUjiLab({ formData, setFormData }: FormProps) {
             <div className="flex gap-x-8 items-center">
               <img id="hemat-img" src="/blood-test.png" alt="Question" className="w-16" />
               <label className="flex flex-col">
-                <h5 className="mb-2 text-xl font-medium tracking-tight text-gray-900 dark:text-white">
+                <h5 className="mb-2 text-xl font-medium tracking-tight text-gray-900">
                   Hematokrit [%]
                 </h5>
-                <p className="font-normal text-gray-700 dark:text-gray-400">
+                <p className="font-normal text-gray-700">
                   Hematokrit adalah persentase volume sel darah merah dalam darah
                 </p>
               </label>
@@ -476,10 +483,10 @@ function FormUjiLab({ formData, setFormData }: FormProps) {
             <div className="flex gap-x-8 items-center">
               <img id="jplat-img" src="/thermometer.png" alt="Question" className="w-16" />
               <label className="flex flex-col">
-                <h5 className="mb-2 text-xl font-medium tracking-tight text-gray-900 dark:text-white">
+                <h5 className="mb-2 text-xl font-medium tracking-tight text-gray-900">
                   Jumlah Platelet [×10^3/uL]
                 </h5>
-                <p className="font-normal text-gray-700 dark:text-gray-400">
+                <p className="font-normal text-gray-700">
                   Jumlah platelet yang normal berkisar antara 150-450 ×10^3/uL
                 </p>
               </label>
