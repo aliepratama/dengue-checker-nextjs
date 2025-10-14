@@ -3,33 +3,61 @@
 import { useEffect, useState } from 'react'
 import dynamic from 'next/dynamic'
 import Navbar from './components/Navbar'
+import { createClient } from '../utils/supabase/client'
 
-const Plot = dynamic(() => import('react-plotly.js'), { ssr: false })
+const PlotlyChart = dynamic(() => import('./components/PlotlyChart'), {
+  ssr: false,
+  loading: () => (
+    <div className="flex items-center justify-center h-full">
+      <p className="text-gray-500">Loading Plotly...</p>
+    </div>
+  ),
+})
 
 export default function Home() {
   const [plotData, setPlotData] = useState<any>(null)
+  const [supabaseStatus, setSupabaseStatus] = useState<string>('Testing...')
+  const [isLoadingPlot, setIsLoadingPlot] = useState<boolean>(true)
+  const [isMounted, setIsMounted] = useState<boolean>(false)
 
   useEffect(() => {
+    setIsMounted(true)
+
+    // Test Supabase connection
+    const testSupabase = async () => {
+      try {
+        const supabase = createClient()
+        const { error } = await supabase.auth.getSession()
+        if (error) {
+          setSupabaseStatus('❌ Error: ' + error.message)
+        } else {
+          setSupabaseStatus('✅ Supabase Connected!')
+        }
+      } catch (err) {
+        setSupabaseStatus('❌ Connection failed: ' + String(err))
+      }
+    }
+    testSupabase()
+
     // Load heatmap data
+    setIsLoadingPlot(true)
     fetch('/heatmap_geo.json')
       .then((response) => response.json())
       .then((data) => {
+        console.log('Heatmap data loaded:', data)
         setPlotData(data)
-        // Give Plotly a moment to mount and then trigger resize so it lays out correctly
-        setTimeout(() => {
-          try {
-            window.dispatchEvent(new Event('resize'))
-          } catch (e) {
-            // ignore
-          }
-        }, 100)
+        setIsLoadingPlot(false)
       })
-      .catch((error) => console.error('Error loading heatmap:', error))
+      .catch((error) => {
+        console.error('Error loading heatmap:', error)
+        setIsLoadingPlot(false)
+      })
   }, [])
 
   return (
     <div>
       <Navbar active="home" />
+
       <div style={{ top: 0, marginTop: 80 }}>
         <section className="bg-gray-50">
           <div className="mx-auto max-w-screen-xl px-4 py-2 lg:flex lg:h-[40vh] lg:items-center">
@@ -46,7 +74,7 @@ export default function Home() {
 
               <div className="mt-8 flex flex-wrap justify-center gap-4">
                 <a
-                  className="flex gap-x-2 rounded bg-red-700 px-12 py-3 text-sm font-medium text-white shadow hover:bg-red-800 focus:outline-none focus:ring active:bg-red-500 sm:w-auto"
+                  className="flex gap-x-2 rounded bg-red-700 px-12 pata text-sm font-medium text-white shadow hover:bg-red-800 focus:outline-none focus:ring active:bg-red-500 sm:w-auto"
                   href="/form"
                 >
                   <svg
@@ -71,6 +99,11 @@ export default function Home() {
               </div>
             </div>
           </div>
+          {/* Supabase Test Status */}
+          <div className="bg-blue-50 border-b border-blue-200 px-4 py-2 text-center text-sm">
+            <span className="font-semibold">Supabase Status:</span>{' '}
+            {supabaseStatus}
+          </div>
         </section>
       </div>
 
@@ -78,15 +111,23 @@ export default function Home() {
         <div
           id="chart"
           className="chart mx-auto w-full lg:w-3/4 px-8"
-          style={{ minHeight: 400 }}
+          style={{ minHeight: 600, height: 600, width: '100%' }}
         >
-          {plotData && (
-            <Plot
+          {isLoadingPlot && (
+            <div className="flex items-center justify-center h-full">
+              <p className="text-gray-500">Loading chart...</p>
+            </div>
+          )}
+          {!isLoadingPlot && !plotData && (
+            <div className="flex items-center justify-center h-full">
+              <p className="text-red-500">Failed to load chart data</p>
+            </div>
+          )}
+          {!isLoadingPlot && plotData && isMounted && (
+            <PlotlyChart
               data={plotData.data}
               layout={{
                 ...plotData.layout,
-                autosize: true,
-                responsive: true,
                 title: {
                   ...plotData.layout.title,
                   font: {
@@ -95,9 +136,6 @@ export default function Home() {
                   automargin: true,
                 },
               }}
-              config={{ responsive: true }}
-              style={{ width: '100%', height: '100%' }}
-              useResizeHandler={true}
             />
           )}
         </div>
