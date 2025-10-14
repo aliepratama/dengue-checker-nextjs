@@ -1,7 +1,7 @@
 // Model weights dan normalizer
 export const normalizer = {
-  mean: [5.4414062, 102.583984, 3.0473957, 13.312175, 32.052082, 95.52734], // [dengue.days, current_temp, wbc, hemoglobin, hematocrit, platelet]
-  std: [2.2206898, 1.3689892, 1.1779854, 3.1176934, 7.264704, 27.897495]
+    mean: [0, 0, 0, 0, 0, 0], // Ganti dengan nilai mean dari normalizer.joblib
+  std: [1, 1, 1, 1, 1, 1]    // Ganti dengan nilai std dari normalizer.joblib
 };
 
 // Logistic Regression coefficients dan intercept
