@@ -1,11 +1,16 @@
 interface QuestionProps {
-  title: string;
-  description: string;
-  image: string;
-  labelFor?: string;
+  title: string
+  description: string
+  image: string
+  labelFor?: string
 }
 
-export default function Question({ title, description, image, labelFor }: QuestionProps) {
+export default function Question({
+  title,
+  description,
+  image,
+  labelFor,
+}: QuestionProps) {
   return (
     <div className="flex gap-x-8 items-center">
       <img
@@ -14,7 +19,10 @@ export default function Question({ title, description, image, labelFor }: Questi
         alt="Question"
         className="w-16"
       />
-      <label htmlFor={labelFor ? labelFor.toLowerCase() : ''} className="flex flex-col">
+      <label
+        htmlFor={labelFor ? labelFor.toLowerCase() : ''}
+        className="flex flex-col"
+      >
         <h5 className="mb-2 text-xl font-medium tracking-tight text-gray-900 dark:text-white">
           {title}
         </h5>
@@ -23,5 +31,5 @@ export default function Question({ title, description, image, labelFor }: Questi
         </p>
       </label>
     </div>
-  );
+  )
 }

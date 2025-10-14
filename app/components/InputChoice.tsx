@@ -1,16 +1,29 @@
 interface InputChoiceProps {
-  name: string;
-  choices: string[];
-  value?: string;
-  onChange: (value: string) => void;
-  wMode?: 'full' | 'fit';
+  name: string
+  choices: string[]
+  value?: string
+  onChange: (value: string) => void
+  wMode?: 'full' | 'fit'
 }
 
-export default function InputChoice({ name, choices, value, onChange, wMode = 'full' }: InputChoiceProps) {
+export default function InputChoice({
+  name,
+  choices,
+  value,
+  onChange,
+  wMode = 'full',
+}: InputChoiceProps) {
   return (
-    <ul className={`${wMode === 'full' ? 'w-full' : ''} items-center text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg sm:flex dark:bg-gray-700 dark:border-gray-600 dark:text-white`}>
+    <ul
+      className={`${
+        wMode === 'full' ? 'w-full' : ''
+      } items-center text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg sm:flex dark:bg-gray-700 dark:border-gray-600 dark:text-white`}
+    >
       {choices.map((choice, index) => (
-        <li key={index} className="w-full border-b border-gray-200 sm:border-b-0 sm:border-r dark:border-gray-600">
+        <li
+          key={index}
+          className="w-full border-b border-gray-200 sm:border-b-0 sm:border-r dark:border-gray-600"
+        >
           <div className="flex items-center px-8">
             <input
               id={`horizontal-list-radio-${name.toLowerCase()}-${index}`}
@@ -31,5 +44,5 @@ export default function InputChoice({ name, choices, value, onChange, wMode = 'f
         </li>
       ))}
     </ul>
-  );
+  )
 }

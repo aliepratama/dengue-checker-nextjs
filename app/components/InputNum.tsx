@@ -1,15 +1,24 @@
 interface InputNumProps {
-  name: string;
-  min?: number;
-  max?: number;
-  step?: number;
-  value: number;
-  onChange: (value: number) => void;
-  disabled?: boolean;
-  wMode?: 'full' | 'fit';
+  name: string
+  min?: number
+  max?: number
+  step?: number
+  value: number
+  onChange: (value: number) => void
+  disabled?: boolean
+  wMode?: 'full' | 'fit'
 }
 
-export default function InputNum({ name, min, max, step, value, onChange, disabled, wMode = 'full' }: InputNumProps) {
+export default function InputNum({
+  name,
+  min,
+  max,
+  step,
+  value,
+  onChange,
+  disabled,
+  wMode = 'full',
+}: InputNumProps) {
   return (
     <div className={wMode === 'full' ? 'w-full' : ''}>
       <input
@@ -25,5 +34,5 @@ export default function InputNum({ name, min, max, step, value, onChange, disabl
         disabled={disabled}
       />
     </div>
-  );
+  )
 }
