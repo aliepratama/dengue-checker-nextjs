@@ -1,7 +1,7 @@
-// Model weights dan normalizer - nanti Anda akan isi dengan nilai sebenarnya
+// Model weights dan normalizer
 export const normalizer = {
-  mean: [0, 0, 0, 0, 0, 0], // [dengue.days, current_temp, wbc, hemoglobin, hematocrit, platelet]
-  std: [1, 1, 1, 1, 1, 1]
+  mean: [5.4414062, 102.583984, 3.0473957, 13.312175, 32.052082, 95.52734], // [dengue.days, current_temp, wbc, hemoglobin, hematocrit, platelet]
+  std: [2.2206898, 1.3689892, 1.1779854, 3.1176934, 7.264704, 27.897495]
 };
 
 // Logistic Regression coefficients dan intercept
@@ -11,8 +11,8 @@ export const models = {
     intercept: [0]
   },
   fever_general_data: {
-    coef: [[0, 0, 0, 0, 0, 0, 0, 0, 0, 0]], // fever(2) + general(8)
-    intercept: [0]
+    coef: [[-0.6573720403525993, 0.47243607447663594, 3.678645309662817, 3.2371620158049743, 4.696551901855814, 6.175915051852743, 2.410549576942971, 4.477206796711392, 3.8263365894504826, 2.321341552097079]], // fever(2) + general(8)
+    intercept: [-10.92467979624238]
   },
   lab_general_data: {
     coef: [[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]], // lab(4) + general(8)
