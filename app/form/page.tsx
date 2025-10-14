@@ -1,12 +1,12 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Navbar from '../components/Navbar';
 import Stepper from '../components/Stepper';
 import Link from 'next/link';
 
-export default function FormPage() {
+function FormContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const step = parseInt(searchParams.get('step') || '0');
@@ -21,6 +21,14 @@ export default function FormPage() {
       {step === 0 && <Step1 />}
       {step === 1 && <Step2 />}
     </div>
+  );
+}
+
+export default function FormPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <FormContent />
+    </Suspense>
   );
 }
 
