@@ -14,7 +14,7 @@ export default function RootLayout({
   return (
     <html lang="id">
       <head>
-        <link rel="shortcut icon" href="/images/tsdn_logo.png" type="image/x-icon" />
+        <link rel="shortcut icon" href="/uty_logo.png" type="image/x-icon" />
       </head>
       <body>
         {children}

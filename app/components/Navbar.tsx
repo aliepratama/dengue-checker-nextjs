@@ -18,25 +18,13 @@ export default function Navbar({ active }: NavbarProps) {
       <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
         <div className="flex items-center space-x-3 rtl:space-x-reverse w-fit">
           <a
-            href="https://dataacademy.co.id/tsdn-2024/"
-            className="flex items-center space-x-3 rtl:space-x-reverse"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <img
-              src="/images/tsdn_logo.png"
-              className="h-10"
-              alt="TSDN 2024 Logo"
-            />
-          </a>
-          <a
             href="https://uty.ac.id/"
             className="flex items-center space-x-3 rtl:space-x-reverse"
             target="_blank"
             rel="noopener noreferrer"
           >
             <img
-              src="/images/uty_logo.png"
+              src="/uty_logo.png"
               className="h-10"
               alt="UTY Logo"
             />
@@ -44,13 +32,13 @@ export default function Navbar({ active }: NavbarProps) {
         </div>
         <div className="flex md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
           <a
-            href="https://github.com/aliepratama/dengue-tsdn-2024"
+            href="https://github.com/aliepratama/dengue-checker-nextjs"
             target="_blank"
             rel="noopener noreferrer"
             className="flex gap-x-2 text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-4 py-2 text-center dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800"
           >
             <img
-              src="/icons/github.svg"
+              src="/github.svg"
               className="text-white w-5 h-5"
               alt="Github Icon"
             />
@@ -93,7 +81,7 @@ export default function Navbar({ active }: NavbarProps) {
                 aria-current="page"
               >
                 <img
-                  src="/icons/house.svg"
+                  src="/house.svg"
                   alt="House Icon"
                   className="w-5 h-5"
                 />
@@ -107,7 +95,7 @@ export default function Navbar({ active }: NavbarProps) {
                 aria-current="page"
               >
                 <img
-                  src="/icons/scan-search.svg"
+                  src="/scan-search.svg"
                   alt="Form Icon"
                   className="w-5 h-5"
                 />

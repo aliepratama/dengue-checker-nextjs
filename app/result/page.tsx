@@ -44,25 +44,13 @@ export default function ResultPage() {
           <div className="flex flex-col-reverse md:gap-x-4 mb-3 me-4 items-center md:flex-row md:mb-0">
             <div className="flex items-center space-x-3 rtl:space-x-reverse">
               <a
-                href="https://dataacademy.co.id/tsdn-2024/"
-                className="flex items-center space-x-3 rtl:space-x-reverse"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <img
-                  src="/images/tsdn_logo.png"
-                  className="h-10"
-                  alt="TSDN 2024 Logo"
-                />
-              </a>
-              <a
                 href="https://uty.ac.id/"
                 className="flex items-center space-x-3 rtl:space-x-reverse"
                 target="_blank"
                 rel="noopener noreferrer"
               >
                 <img
-                  src="/images/uty_logo.png"
+                  src="/uty_logo.png"
                   className="h-10"
                   alt="UTY Logo"
                 />
@@ -129,7 +117,7 @@ export default function ResultPage() {
           <div className="flex justify-center items-center aspect-square p-12">
             <img
               className="w-40 rounded-t-lg"
-              src={prediction === 0 ? '/images/protected.png' : '/images/mosquito.png'}
+              src={prediction === 0 ? '/protected.png' : '/mosquito.png'}
               alt="Classification Result"
             />
           </div>
@@ -150,7 +138,7 @@ export default function ResultPage() {
                 className="flex justify-center md:justify-normal gap-x-2 rounded px-4 py-2 text-sm font-medium text-red-700 shadow hover:text-red-700 focus:outline-none focus:ring active:text-red-500 sm:w-auto"
               >
                 <img
-                  src="/icons/house.svg"
+                  src="/house.svg"
                   alt="Home Icon"
                   className="w-5 h-5"
                 />
@@ -161,7 +149,7 @@ export default function ResultPage() {
                 className="flex justify-center md:justify-normal gap-x-2 rounded bg-red-700 px-4 py-2 text-sm font-medium text-white shadow hover:bg-red-800 focus:outline-none focus:ring active:bg-red-500 sm:w-auto"
               >
                 <img
-                  src="/icons/rotate-ccw.svg"
+                  src="/rotate-ccw.svg"
                   alt="Restart Icon"
                   className="w-5 h-5"
                 />
@@ -182,7 +170,7 @@ export default function ResultPage() {
               <div className="mt-8 grid grid-cols-1 gap-4 md:grid-cols-3 md:gap-8">
                 <blockquote className="flex flex-col gap-y-4 rounded-lg bg-gray-50 p-6 shadow-sm sm:p-8">
                   <div className="flex items-center gap-4">
-                    <img alt="Icon" src="/images/doctor.png" className="w-16" />
+                    <img alt="Icon" src="/doctor.png" className="w-16" />
                     <p className="mt-0.5 text-lg font-medium text-gray-900">Konsultasi ke dokter</p>
                   </div>
                   <p className="mt-4 text-gray-700">
@@ -195,7 +183,7 @@ export default function ResultPage() {
                     className="flex flex-row-reverse justify-center gap-x-2 rounded bg-red-700 px-4 py-2 text-sm font-medium text-white shadow hover:bg-red-800 focus:outline-none focus:ring active:bg-red-500 sm:w-auto"
                   >
                     <img
-                      src="/icons/arrow-right.svg"
+                      src="/arrow-right.svg"
                       alt="Go to Icon"
                       className="w-5 h-5"
                     />
@@ -205,7 +193,7 @@ export default function ResultPage() {
 
                 <blockquote className="flex flex-col gap-y-4 rounded-lg bg-gray-50 p-6 shadow-sm sm:p-8">
                   <div className="flex items-center gap-4">
-                    <img alt="Icon" src="/images/fogging.png" className="w-16" />
+                    <img alt="Icon" src="/fogging.png" className="w-16" />
                     <p className="mt-0.5 text-lg font-medium text-gray-900">Melakukan penyemprotan</p>
                   </div>
                   <p className="mt-4 text-gray-700">
@@ -218,7 +206,7 @@ export default function ResultPage() {
                     className="flex flex-row-reverse justify-center gap-x-2 rounded bg-red-700 px-4 py-2 text-sm font-medium text-white shadow hover:bg-red-800 focus:outline-none focus:ring active:bg-red-500 sm:w-auto"
                   >
                     <img
-                      src="/icons/arrow-right.svg"
+                      src="/arrow-right.svg"
                       alt="Go to Icon"
                       className="w-5 h-5"
                     />
@@ -228,7 +216,7 @@ export default function ResultPage() {
 
                 <blockquote className="flex flex-col gap-y-4 rounded-lg bg-gray-50 p-6 shadow-sm sm:p-8">
                   <div className="flex items-center gap-4">
-                    <img alt="Icon" src="/images/mosquito (1).png" className="w-16" />
+                    <img alt="Icon" src="/mosquito (1).png" className="w-16" />
                     <p className="mt-0.5 text-lg font-medium text-gray-900">Memberi bubuk abate</p>
                   </div>
                   <p className="mt-4 text-gray-700">
@@ -241,7 +229,7 @@ export default function ResultPage() {
                     className="flex flex-row-reverse justify-center gap-x-2 rounded bg-red-700 px-4 py-2 text-sm font-medium text-white shadow hover:bg-red-800 focus:outline-none focus:ring active:bg-red-500 sm:w-auto"
                   >
                     <img
-                      src="/icons/arrow-right.svg"
+                      src="/arrow-right.svg"
                       alt="Go to Icon"
                       className="w-5 h-5"
                     />

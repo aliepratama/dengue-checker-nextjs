@@ -39,7 +39,7 @@ export default function Home() {
                   href="/form"
                 >
                   <img
-                    src="/icons/scan-search.svg"
+                    src="/scan-search.svg"
                     alt="Scan Icon"
                     className="w-5 h-5"
                   />

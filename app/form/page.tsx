@@ -28,7 +28,7 @@ function Step1() {
   return (
     <div className="flex flex-col items-center py-8 gap-y-12">
       <img
-        src="/images/dengue.png"
+        src="/dengue.png"
         alt="Dengue Illustration"
         className="w-48 max-w-[50%]"
       />
@@ -42,7 +42,7 @@ function Step1() {
           className="flex gap-x-2 rounded bg-red-700 px-6 py-3 text-sm font-medium text-white shadow hover:bg-red-800 focus:outline-none focus:ring active:bg-red-500 sm:w-auto"
         >
           <img
-            src="/icons/venetian-mask.svg"
+            src="/venetian-mask.svg"
             alt="Mask Icon"
             className="w-5 h-5"
           />
@@ -102,7 +102,7 @@ function Step2() {
         className="flex items-center justify-center gap-x-2 px-4 py-2 text-sm font-medium text-white bg-red-700 border border-transparent rounded-md shadow-sm hover:bg-red-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
       >
         <img
-          src="/icons/scan-search.svg"
+          src="/scan-search.svg"
           alt="Submit Icon"
           className="w-5 h-5"
         />
@@ -145,7 +145,7 @@ function FormGejalaUtama({ formData, setFormData }: FormProps) {
           className="flex h-fit items-center justify-center gap-x-2 px-4 py-2 text-sm font-medium text-white bg-red-700 border border-transparent rounded-md shadow-sm hover:bg-red-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
         >
           <img
-            src="/icons/arrow-right.svg"
+            src="/arrow-right.svg"
             alt="Next Icon"
             className="w-5 h-5"
           />
@@ -156,7 +156,7 @@ function FormGejalaUtama({ formData, setFormData }: FormProps) {
       <div className="flex flex-col gap-y-8">
         <div className="flex flex-col gap-y-4 md:flex-row gap-x-4 justify-between">
           <div className="flex gap-x-8 items-center">
-            <img src="/images/sick.png" alt="Question" className="w-16" />
+            <img src="/sick.png" alt="Question" className="w-16" />
             <label className="flex flex-col">
               <h5 className="mb-2 text-xl font-medium tracking-tight text-gray-900 dark:text-white">
                 Apakah anda merasakan demam?
@@ -192,7 +192,7 @@ function FormGejalaUtama({ formData, setFormData }: FormProps) {
           {/* Durasi Demam */}
           <div className="flex flex-col gap-y-4">
             <div className="flex gap-x-8 items-center">
-              <img id="ddema-img" src="/images/schedule.png" alt="Question" className="w-16" />
+              <img id="ddema-img" src="/schedule.png" alt="Question" className="w-16" />
               <label className="flex flex-col">
                 <h5 className="mb-2 text-xl font-medium tracking-tight text-gray-900 dark:text-white">
                   Durasi demam (hari)
@@ -217,7 +217,7 @@ function FormGejalaUtama({ formData, setFormData }: FormProps) {
           {/* Suhu */}
           <div className="flex flex-col gap-y-4">
             <div className="flex gap-x-8 items-center">
-              <img id="suhun-img" src="/images/thermometer.png" alt="Question" className="w-16" />
+              <img id="suhun-img" src="/thermometer.png" alt="Question" className="w-16" />
               <label className="flex flex-col">
                 <h5 className="mb-2 text-xl font-medium tracking-tight text-gray-900 dark:text-white">
                   Suhu saat ini (°C)
@@ -247,14 +247,14 @@ function FormGejalaUtama({ formData, setFormData }: FormProps) {
 
 function FormGejalaTambahan({ formData, setFormData }: FormProps) {
   const symptoms = [
-    { code: 'SKPLA', title: 'Apakah Anda mengalami sakit kepala parah?', desc: 'Sakit kepala parah biasanya disertai dengan gejala lain seperti mual dan muntah', img: '/images/fainting.png' },
-    { code: 'NYMAT', title: 'Apakah Anda merasakan nyeri di belakang mata?', desc: 'Nyeri di belakang mata dapat dirasakan saat bergerak atau menolehkan kepala', img: '/images/eye.png' },
-    { code: 'NYSEN', title: 'Apakah Anda merasakan nyeri pada sendi atau otot?', desc: 'Nyeri sendi atau otot biasanya dirasakan di beberapa bagian', img: '/images/muscle-pain.png' },
-    { code: 'RSMUL', title: 'Apakah Anda merasakan rasa logam di mulut?', desc: 'Mulut yang terasa seperti logam disebut dysgeusia, atau penyimpangan sensasi rasa', img: '/images/disease.png' },
-    { code: 'HINFM', title: 'Apakah Anda kehilangan nafsu makan?', desc: 'Anda sudah tidak selera makan apapun dalam beberapa hari terakhir', img: '/images/loss-of-appetite.png' },
-    { code: 'NYPER', title: 'Apakah Anda mengalami nyeri perut?', desc: 'Nyeri perut biasanya dirasakan di bagian perut atas atau bawah', img: '/images/abdominal-pain.png' },
-    { code: 'MUMUN', title: 'Apakah Anda mengalami mual atau muntah?', desc: 'Mual dan muntah biasanya disertai dengan gejala lain seperti sakit kepala', img: '/images/vomit.png' },
-    { code: 'MDIAR', title: 'Apakah Anda mengalami diare?', desc: 'Frekuensi buang air besar (BAB) meningkat dan feses yang dikeluarkan bertekstur encer atau cair', img: '/images/diarrhea.png' },
+    { code: 'SKPLA', title: 'Apakah Anda mengalami sakit kepala parah?', desc: 'Sakit kepala parah biasanya disertai dengan gejala lain seperti mual dan muntah', img: '/fainting.png' },
+    { code: 'NYMAT', title: 'Apakah Anda merasakan nyeri di belakang mata?', desc: 'Nyeri di belakang mata dapat dirasakan saat bergerak atau menolehkan kepala', img: '/eye.png' },
+    { code: 'NYSEN', title: 'Apakah Anda merasakan nyeri pada sendi atau otot?', desc: 'Nyeri sendi atau otot biasanya dirasakan di beberapa bagian', img: '/muscle-pain.png' },
+    { code: 'RSMUL', title: 'Apakah Anda merasakan rasa logam di mulut?', desc: 'Mulut yang terasa seperti logam disebut dysgeusia, atau penyimpangan sensasi rasa', img: '/disease.png' },
+    { code: 'HINFM', title: 'Apakah Anda kehilangan nafsu makan?', desc: 'Anda sudah tidak selera makan apapun dalam beberapa hari terakhir', img: '/loss-of-appetite.png' },
+    { code: 'NYPER', title: 'Apakah Anda mengalami nyeri perut?', desc: 'Nyeri perut biasanya dirasakan di bagian perut atas atau bawah', img: '/abdominal-pain.png' },
+    { code: 'MUMUN', title: 'Apakah Anda mengalami mual atau muntah?', desc: 'Mual dan muntah biasanya disertai dengan gejala lain seperti sakit kepala', img: '/vomit.png' },
+    { code: 'MDIAR', title: 'Apakah Anda mengalami diare?', desc: 'Frekuensi buang air besar (BAB) meningkat dan feses yang dikeluarkan bertekstur encer atau cair', img: '/diarrhea.png' },
   ];
 
   return (
@@ -271,7 +271,7 @@ function FormGejalaTambahan({ formData, setFormData }: FormProps) {
           className="flex h-fit items-center justify-center gap-x-2 px-4 py-2 text-sm font-medium text-white bg-red-700 border border-transparent rounded-md shadow-sm hover:bg-red-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
         >
           <img
-            src="/icons/arrow-right.svg"
+            src="/arrow-right.svg"
             alt="Next Icon"
             className="w-5 h-5"
           />
@@ -350,7 +350,7 @@ function FormUjiLab({ formData, setFormData }: FormProps) {
       <div className="flex flex-col gap-y-8">
         <div className="flex flex-col gap-y-4 md:flex-row gap-x-4 justify-between">
           <div className="flex gap-x-8 items-center">
-            <img src="/images/blood-analysis.png" alt="Question" className="w-16" />
+            <img src="/blood-analysis.png" alt="Question" className="w-16" />
             <label className="flex flex-col">
               <h5 className="mb-2 text-xl font-medium tracking-tight text-gray-900 dark:text-white">
                 Apakah anda sudah melakukan uji darah di Laboratorium?
@@ -386,7 +386,7 @@ function FormUjiLab({ formData, setFormData }: FormProps) {
           {/* WBC */}
           <div className="flex flex-col gap-y-4">
             <div className="flex gap-x-8 items-center">
-              <img id="jwbcs-img" src="/images/white-blood-cell.png" alt="Question" className="w-16" />
+              <img id="jwbcs-img" src="/white-blood-cell.png" alt="Question" className="w-16" />
               <label className="flex flex-col">
                 <h5 className="mb-2 text-xl font-medium tracking-tight text-gray-900 dark:text-white">
                   Jumlah WBC (sel darah putih) [×10^3/uL]
@@ -412,7 +412,7 @@ function FormUjiLab({ formData, setFormData }: FormProps) {
           {/* Hemoglobin */}
           <div className="flex flex-col gap-y-4">
             <div className="flex gap-x-8 items-center">
-              <img id="hemog-img" src="/images/red-blood-cells.png" alt="Question" className="w-16" />
+              <img id="hemog-img" src="/red-blood-cells.png" alt="Question" className="w-16" />
               <label className="flex flex-col">
                 <h5 className="mb-2 text-xl font-medium tracking-tight text-gray-900 dark:text-white">
                   Hemoglobin [g/dL]
@@ -440,7 +440,7 @@ function FormUjiLab({ formData, setFormData }: FormProps) {
           {/* Hematocrit */}
           <div className="flex flex-col gap-y-4">
             <div className="flex gap-x-8 items-center">
-              <img id="hemat-img" src="/images/blood-test.png" alt="Question" className="w-16" />
+              <img id="hemat-img" src="/blood-test.png" alt="Question" className="w-16" />
               <label className="flex flex-col">
                 <h5 className="mb-2 text-xl font-medium tracking-tight text-gray-900 dark:text-white">
                   Hematokrit [%]
@@ -466,7 +466,7 @@ function FormUjiLab({ formData, setFormData }: FormProps) {
           {/* Platelet */}
           <div className="flex flex-col gap-y-4">
             <div className="flex gap-x-8 items-center">
-              <img id="jplat-img" src="/images/thermometer.png" alt="Question" className="w-16" />
+              <img id="jplat-img" src="/thermometer.png" alt="Question" className="w-16" />
               <label className="flex flex-col">
                 <h5 className="mb-2 text-xl font-medium tracking-tight text-gray-900 dark:text-white">
                   Jumlah Platelet [×10^3/uL]
