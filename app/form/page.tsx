@@ -1,0 +1,495 @@
+'use client';
+
+import { useState, useEffect } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import Navbar from '../components/Navbar';
+import Stepper from '../components/Stepper';
+import Link from 'next/link';
+
+export default function FormPage() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const step = parseInt(searchParams.get('step') || '0');
+  
+  return (
+    <div>
+      <Navbar active="form" />
+      <div style={{ top: 0, marginTop: 80 }}>
+        <Stepper active={step} />
+      </div>
+      
+      {step === 0 && <Step1 />}
+      {step === 1 && <Step2 />}
+    </div>
+  );
+}
+
+function Step1() {
+  return (
+    <div className="flex flex-col items-center py-8 gap-y-12">
+      <img
+        src="/images/dengue.png"
+        alt="Dengue Illustration"
+        className="w-48 max-w-[50%]"
+      />
+      <div className="flex flex-col text-3xl font-extrabold sm:text-5xl gap-x-2">
+        <span> Deteksi DBD hanya dengan </span>
+        <span className="text-red-700"> beberapa pertanyaan saja! </span>
+      </div>
+      <div className="flex gap-x-8">
+        <Link
+          href="/form?step=1"
+          className="flex gap-x-2 rounded bg-red-700 px-6 py-3 text-sm font-medium text-white shadow hover:bg-red-800 focus:outline-none focus:ring active:bg-red-500 sm:w-auto"
+        >
+          <img
+            src="/icons/venetian-mask.svg"
+            alt="Mask Icon"
+            className="w-5 h-5"
+          />
+          Isi sebagai anonim
+        </Link>
+      </div>
+    </div>
+  );
+}
+
+function Step2() {
+  const router = useRouter();
+  
+  // Form state
+  const [formData, setFormData] = useState({
+    KDEMA: 'Tidak',
+    DDEMA: 1,
+    SUHUN: 38.2,
+    ULABO: 'Belum',
+    JWBCS: 6.0,
+    HEMOG: 14.0,
+    HEMAT: 40,
+    JPLAT: 150,
+    SKPLA: 'Tidak',
+    NYMAT: 'Tidak',
+    NYSEN: 'Tidak',
+    RSMUL: 'Tidak',
+    HINFM: 'Tidak',
+    NYPER: 'Tidak',
+    MUMUN: 'Tidak',
+    MDIAR: 'Tidak',
+  });
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    // Store form data in localStorage
+    localStorage.setItem('formData', JSON.stringify(formData));
+    
+    // Navigate to result
+    router.push('/result');
+  };
+
+  return (
+    <form onSubmit={handleSubmit} className="flex flex-col gap-y-6 px-4 lg:px-16">
+      {/* Form Gejala Utama */}
+      <FormGejalaUtama formData={formData} setFormData={setFormData} />
+      
+      {/* Form Gejala Tambahan */}
+      <FormGejalaTambahan formData={formData} setFormData={setFormData} />
+      
+      {/* Form Uji Lab */}
+      <FormUjiLab formData={formData} setFormData={setFormData} />
+      
+      <button
+        type="submit"
+        className="flex items-center justify-center gap-x-2 px-4 py-2 text-sm font-medium text-white bg-red-700 border border-transparent rounded-md shadow-sm hover:bg-red-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+      >
+        <img
+          src="/icons/scan-search.svg"
+          alt="Submit Icon"
+          className="w-5 h-5"
+        />
+        <span className="text-nowrap">Periksa</span>
+      </button>
+    </form>
+  );
+}
+
+interface FormProps {
+  formData: any;
+  setFormData: (data: any) => void;
+}
+
+function FormGejalaUtama({ formData, setFormData }: FormProps) {
+  const isDemamDisabled = formData.KDEMA === 'Tidak';
+
+  useEffect(() => {
+    const images = ['ddema-img', 'suhun-img'];
+    images.forEach(id => {
+      const img = document.querySelector(`img#${id}`) as HTMLImageElement;
+      if (img) {
+        img.style.transition = '0.5s';
+        img.style.filter = isDemamDisabled ? 'grayscale(100%)' : 'none';
+      }
+    });
+  }, [isDemamDisabled]);
+
+  return (
+    <div
+      id="form-gejala-utama"
+      className="block w-full px-4 md:px-16 py-10 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700"
+    >
+      <div className="flex w-full justify-between items-center py-4">
+        <h3 className="text-3xl font-bold tracking-tight text-red-700 dark:text-white">
+          Gejala Utama
+        </h3>
+        <a
+          href="#form-gejala-tambahan"
+          className="flex h-fit items-center justify-center gap-x-2 px-4 py-2 text-sm font-medium text-white bg-red-700 border border-transparent rounded-md shadow-sm hover:bg-red-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+        >
+          <img
+            src="/icons/arrow-right.svg"
+            alt="Next Icon"
+            className="w-5 h-5"
+          />
+          <span className="text-nowrap">Lanjut</span>
+        </a>
+      </div>
+
+      <div className="flex flex-col gap-y-8">
+        <div className="flex flex-col gap-y-4 md:flex-row gap-x-4 justify-between">
+          <div className="flex gap-x-8 items-center">
+            <img src="/images/sick.png" alt="Question" className="w-16" />
+            <label className="flex flex-col">
+              <h5 className="mb-2 text-xl font-medium tracking-tight text-gray-900 dark:text-white">
+                Apakah anda merasakan demam?
+              </h5>
+              <p className="font-normal text-gray-700 dark:text-gray-400">
+                Jika suhu tubuh anda di atas 38°C, maka anda seharusnya merasakan demam
+              </p>
+            </label>
+          </div>
+          <ul className="items-center text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg sm:flex dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+            {['Iya', 'Tidak'].map((choice, index) => (
+              <li key={choice} className="w-full border-b border-gray-200 sm:border-b-0 sm:border-r dark:border-gray-600">
+                <div className="flex items-center px-8">
+                  <input
+                    id={`kdema-${index}`}
+                    type="radio"
+                    value={choice}
+                    name="KDEMA"
+                    checked={formData.KDEMA === choice}
+                    onChange={(e) => setFormData({ ...formData, KDEMA: e.target.value })}
+                    className="w-4 h-4 text-red-600 bg-gray-100 border-gray-300 focus:ring-red-500"
+                  />
+                  <label htmlFor={`kdema-${index}`} className="w-full py-3 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">
+                    {choice}
+                  </label>
+                </div>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <div className="grid gap-6 md:grid-cols-2">
+          {/* Durasi Demam */}
+          <div className="flex flex-col gap-y-4">
+            <div className="flex gap-x-8 items-center">
+              <img id="ddema-img" src="/images/schedule.png" alt="Question" className="w-16" />
+              <label className="flex flex-col">
+                <h5 className="mb-2 text-xl font-medium tracking-tight text-gray-900 dark:text-white">
+                  Durasi demam (hari)
+                </h5>
+                <p className="font-normal text-gray-700 dark:text-gray-400">
+                  Berapa lama Anda merasakan demam?
+                </p>
+              </label>
+            </div>
+            <input
+              type="number"
+              name="DDEMA"
+              className="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-red-500 focus:border-red-500 block p-2.5"
+              min={1}
+              step={1}
+              value={formData.DDEMA}
+              onChange={(e) => setFormData({ ...formData, DDEMA: parseInt(e.target.value) })}
+              disabled={isDemamDisabled}
+            />
+          </div>
+
+          {/* Suhu */}
+          <div className="flex flex-col gap-y-4">
+            <div className="flex gap-x-8 items-center">
+              <img id="suhun-img" src="/images/thermometer.png" alt="Question" className="w-16" />
+              <label className="flex flex-col">
+                <h5 className="mb-2 text-xl font-medium tracking-tight text-gray-900 dark:text-white">
+                  Suhu saat ini (°C)
+                </h5>
+                <p className="font-normal text-gray-700 dark:text-gray-400">
+                  Anda dapat mengecek suhu tubuh Anda dengan termometer
+                </p>
+              </label>
+            </div>
+            <input
+              type="number"
+              name="SUHUN"
+              className="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-red-500 focus:border-red-500 block p-2.5"
+              min={35.0}
+              max={45.0}
+              step={0.1}
+              value={formData.SUHUN}
+              onChange={(e) => setFormData({ ...formData, SUHUN: parseFloat(e.target.value) })}
+              disabled={isDemamDisabled}
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function FormGejalaTambahan({ formData, setFormData }: FormProps) {
+  const symptoms = [
+    { code: 'SKPLA', title: 'Apakah Anda mengalami sakit kepala parah?', desc: 'Sakit kepala parah biasanya disertai dengan gejala lain seperti mual dan muntah', img: '/images/fainting.png' },
+    { code: 'NYMAT', title: 'Apakah Anda merasakan nyeri di belakang mata?', desc: 'Nyeri di belakang mata dapat dirasakan saat bergerak atau menolehkan kepala', img: '/images/eye.png' },
+    { code: 'NYSEN', title: 'Apakah Anda merasakan nyeri pada sendi atau otot?', desc: 'Nyeri sendi atau otot biasanya dirasakan di beberapa bagian', img: '/images/muscle-pain.png' },
+    { code: 'RSMUL', title: 'Apakah Anda merasakan rasa logam di mulut?', desc: 'Mulut yang terasa seperti logam disebut dysgeusia, atau penyimpangan sensasi rasa', img: '/images/disease.png' },
+    { code: 'HINFM', title: 'Apakah Anda kehilangan nafsu makan?', desc: 'Anda sudah tidak selera makan apapun dalam beberapa hari terakhir', img: '/images/loss-of-appetite.png' },
+    { code: 'NYPER', title: 'Apakah Anda mengalami nyeri perut?', desc: 'Nyeri perut biasanya dirasakan di bagian perut atas atau bawah', img: '/images/abdominal-pain.png' },
+    { code: 'MUMUN', title: 'Apakah Anda mengalami mual atau muntah?', desc: 'Mual dan muntah biasanya disertai dengan gejala lain seperti sakit kepala', img: '/images/vomit.png' },
+    { code: 'MDIAR', title: 'Apakah Anda mengalami diare?', desc: 'Frekuensi buang air besar (BAB) meningkat dan feses yang dikeluarkan bertekstur encer atau cair', img: '/images/diarrhea.png' },
+  ];
+
+  return (
+    <div
+      id="form-gejala-tambahan"
+      className="block w-full px-4 md:px-16 py-10 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700"
+    >
+      <div className="flex w-full justify-between items-center py-4">
+        <h3 className="text-3xl font-bold tracking-tight text-red-700 dark:text-white">
+          Gejala Tambahan
+        </h3>
+        <a
+          href="#form-uji-lab"
+          className="flex h-fit items-center justify-center gap-x-2 px-4 py-2 text-sm font-medium text-white bg-red-700 border border-transparent rounded-md shadow-sm hover:bg-red-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+        >
+          <img
+            src="/icons/arrow-right.svg"
+            alt="Next Icon"
+            className="w-5 h-5"
+          />
+          <span className="text-nowrap">Lanjut</span>
+        </a>
+      </div>
+
+      <div className="flex flex-col gap-y-8">
+        {[0, 2, 4, 6].map((startIdx) => (
+          <div key={startIdx} className="grid gap-6 md:grid-cols-2">
+            {symptoms.slice(startIdx, startIdx + 2).map((symptom) => (
+              <div key={symptom.code} className="flex flex-col gap-y-4">
+                <div className="flex gap-x-8 items-center">
+                  <img src={symptom.img} alt="Question" className="w-16" />
+                  <label className="flex flex-col">
+                    <h5 className="mb-2 text-xl font-medium tracking-tight text-gray-900 dark:text-white">
+                      {symptom.title}
+                    </h5>
+                    <p className="font-normal text-gray-700 dark:text-gray-400">
+                      {symptom.desc}
+                    </p>
+                  </label>
+                </div>
+                <ul className="w-full items-center text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg sm:flex">
+                  {['Iya', 'Tidak'].map((choice, index) => (
+                    <li key={choice} className="w-full border-b border-gray-200 sm:border-b-0 sm:border-r">
+                      <div className="flex items-center px-8">
+                        <input
+                          id={`${symptom.code}-${index}`}
+                          type="radio"
+                          value={choice}
+                          name={symptom.code}
+                          checked={formData[symptom.code] === choice}
+                          onChange={(e) => setFormData({ ...formData, [symptom.code]: e.target.value })}
+                          className="w-4 h-4 text-red-600 bg-gray-100 border-gray-300 focus:ring-red-500"
+                        />
+                        <label htmlFor={`${symptom.code}-${index}`} className="w-full py-3 ms-2 text-sm font-medium text-gray-900">
+                          {choice}
+                        </label>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function FormUjiLab({ formData, setFormData }: FormProps) {
+  const isUjiLabDisabled = formData.ULABO === 'Belum';
+
+  useEffect(() => {
+    const images = ['jwbcs-img', 'hemog-img', 'hemat-img', 'jplat-img'];
+    images.forEach(id => {
+      const img = document.querySelector(`img#${id}`) as HTMLImageElement;
+      if (img) {
+        img.style.transition = '0.5s';
+        img.style.filter = isUjiLabDisabled ? 'grayscale(100%)' : 'none';
+      }
+    });
+  }, [isUjiLabDisabled]);
+
+  return (
+    <div
+      id="form-uji-lab"
+      className="block w-full px-4 md:px-16 py-10 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700"
+    >
+      <h3 className="mb-10 text-3xl font-bold tracking-tight text-red-700 dark:text-white">
+        Uji Laboratorium
+      </h3>
+      
+      <div className="flex flex-col gap-y-8">
+        <div className="flex flex-col gap-y-4 md:flex-row gap-x-4 justify-between">
+          <div className="flex gap-x-8 items-center">
+            <img src="/images/blood-analysis.png" alt="Question" className="w-16" />
+            <label className="flex flex-col">
+              <h5 className="mb-2 text-xl font-medium tracking-tight text-gray-900 dark:text-white">
+                Apakah anda sudah melakukan uji darah di Laboratorium?
+              </h5>
+              <p className="font-normal text-gray-700 dark:text-gray-400">
+                Uji darah dapat dilakukan untuk mengetahui kondisi tubuh Anda
+              </p>
+            </label>
+          </div>
+          <ul className="items-center text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg sm:flex">
+            {['Sudah', 'Belum'].map((choice, index) => (
+              <li key={choice} className="w-full border-b border-gray-200 sm:border-b-0 sm:border-r">
+                <div className="flex items-center px-8">
+                  <input
+                    id={`ulabo-${index}`}
+                    type="radio"
+                    value={choice}
+                    name="ULABO"
+                    checked={formData.ULABO === choice}
+                    onChange={(e) => setFormData({ ...formData, ULABO: e.target.value })}
+                    className="w-4 h-4 text-red-600 bg-gray-100 border-gray-300 focus:ring-red-500"
+                  />
+                  <label htmlFor={`ulabo-${index}`} className="w-full py-3 ms-2 text-sm font-medium text-gray-900">
+                    {choice}
+                  </label>
+                </div>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <div className="grid gap-6 md:grid-cols-2">
+          {/* WBC */}
+          <div className="flex flex-col gap-y-4">
+            <div className="flex gap-x-8 items-center">
+              <img id="jwbcs-img" src="/images/white-blood-cell.png" alt="Question" className="w-16" />
+              <label className="flex flex-col">
+                <h5 className="mb-2 text-xl font-medium tracking-tight text-gray-900 dark:text-white">
+                  Jumlah WBC (sel darah putih) [×10^3/uL]
+                </h5>
+                <p className="font-normal text-gray-700 dark:text-gray-400">
+                  Jumlah sel darah putih yang normal berkisar antara 4.5-11.0 ×10^3/uL
+                </p>
+              </label>
+            </div>
+            <input
+              type="number"
+              name="JWBCS"
+              className="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-red-500 focus:border-red-500 block p-2.5"
+              min={1.0}
+              max={15.0}
+              step={0.1}
+              value={formData.JWBCS}
+              onChange={(e) => setFormData({ ...formData, JWBCS: parseFloat(e.target.value) })}
+              disabled={isUjiLabDisabled}
+            />
+          </div>
+
+          {/* Hemoglobin */}
+          <div className="flex flex-col gap-y-4">
+            <div className="flex gap-x-8 items-center">
+              <img id="hemog-img" src="/images/red-blood-cells.png" alt="Question" className="w-16" />
+              <label className="flex flex-col">
+                <h5 className="mb-2 text-xl font-medium tracking-tight text-gray-900 dark:text-white">
+                  Hemoglobin [g/dL]
+                </h5>
+                <p className="font-normal text-gray-700 dark:text-gray-400">
+                  Hemoglobin adalah protein yang membawa oksigen dalam sel darah merah
+                </p>
+              </label>
+            </div>
+            <input
+              type="number"
+              name="HEMOG"
+              className="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-red-500 focus:border-red-500 block p-2.5"
+              min={10.0}
+              max={20.0}
+              step={0.1}
+              value={formData.HEMOG}
+              onChange={(e) => setFormData({ ...formData, HEMOG: parseFloat(e.target.value) })}
+              disabled={isUjiLabDisabled}
+            />
+          </div>
+        </div>
+
+        <div className="grid gap-6 md:grid-cols-2">
+          {/* Hematocrit */}
+          <div className="flex flex-col gap-y-4">
+            <div className="flex gap-x-8 items-center">
+              <img id="hemat-img" src="/images/blood-test.png" alt="Question" className="w-16" />
+              <label className="flex flex-col">
+                <h5 className="mb-2 text-xl font-medium tracking-tight text-gray-900 dark:text-white">
+                  Hematokrit [%]
+                </h5>
+                <p className="font-normal text-gray-700 dark:text-gray-400">
+                  Hematokrit adalah persentase volume sel darah merah dalam darah
+                </p>
+              </label>
+            </div>
+            <input
+              type="number"
+              name="HEMAT"
+              className="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-red-500 focus:border-red-500 block p-2.5"
+              min={1}
+              max={70}
+              step={1}
+              value={formData.HEMAT}
+              onChange={(e) => setFormData({ ...formData, HEMAT: parseInt(e.target.value) })}
+              disabled={isUjiLabDisabled}
+            />
+          </div>
+
+          {/* Platelet */}
+          <div className="flex flex-col gap-y-4">
+            <div className="flex gap-x-8 items-center">
+              <img id="jplat-img" src="/images/thermometer.png" alt="Question" className="w-16" />
+              <label className="flex flex-col">
+                <h5 className="mb-2 text-xl font-medium tracking-tight text-gray-900 dark:text-white">
+                  Jumlah Platelet [×10^3/uL]
+                </h5>
+                <p className="font-normal text-gray-700 dark:text-gray-400">
+                  Jumlah platelet yang normal berkisar antara 150-450 ×10^3/uL
+                </p>
+              </label>
+            </div>
+            <input
+              type="number"
+              name="JPLAT"
+              className="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-red-500 focus:border-red-500 block p-2.5"
+              min={1}
+              max={700}
+              step={1}
+              value={formData.JPLAT}
+              onChange={(e) => setFormData({ ...formData, JPLAT: parseInt(e.target.value) })}
+              disabled={isUjiLabDisabled}
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
