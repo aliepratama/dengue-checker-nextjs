@@ -335,7 +335,10 @@ export default function HistoryPage() {
 
                       {/* Right Section - Actions */}
                       <div className="flex md:flex-col gap-2">
-                        <button className="flex items-center justify-center gap-2 px-4 py-2 bg-red-700 text-white rounded-lg font-medium hover:bg-red-800 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition-all text-sm">
+                        <button 
+                          onClick={() => router.push(`/history/${item.id}`)}
+                          className="flex items-center justify-center gap-2 px-4 py-2 bg-red-700 text-white rounded-lg font-medium hover:bg-red-800 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition-all text-sm"
+                        >
                           <svg
                             className="w-4 h-4"
                             fill="none"
@@ -357,7 +360,104 @@ export default function HistoryPage() {
                           </svg>
                           Detail
                         </button>
-                        <button className="flex items-center justify-center gap-2 px-4 py-2 bg-gray-100 text-gray-700 rounded-lg font-medium hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2 transition-all text-sm">
+                        <button 
+                          onClick={() => {
+                            const record = item.raw
+                            
+                            // Create comprehensive report
+                            const report = `
+╔═══════════════════════════════════════════════════════════════════╗
+║              LAPORAN HASIL PEMERIKSAAN DBD                        ║
+║                  Dengue Fever Check Report                        ║
+╚═══════════════════════════════════════════════════════════════════╝
+
+INFORMASI PEMERIKSAAN
+─────────────────────────────────────────────────────────────────────
+Tanggal Pemeriksaan : ${item.date}
+Waktu Pemeriksaan   : ${item.time}
+ID Pemeriksaan      : ${item.id}
+
+HASIL PEMERIKSAAN
+─────────────────────────────────────────────────────────────────────
+Status              : ${item.result}
+Tingkat Kepercayaan : ${item.probability}%
+Model Prediksi      : ${record.model_used}
+
+${item.status === 'critical' ? '⚠️  PERHATIAN: Hasil menunjukkan indikasi POSITIF DBD\n    Segera konsultasikan ke dokter atau fasilitas kesehatan!' : 
+  item.status === 'warning' ? '⚠️  PERINGATAN: Ada kemungkinan DBD\n    Disarankan untuk memeriksakan diri ke dokter.' :
+  '✓  Hasil pemeriksaan tidak menunjukkan indikasi DBD\n    Tetap jaga kesehatan dan kebersihan lingkungan.'}
+
+DATA DEMAM
+─────────────────────────────────────────────────────────────────────
+Mengalami Demam     : ${record.kdema}
+${record.kdema === 'Iya' ? `Durasi Demam        : ${record.ddema} hari
+Suhu Tubuh          : ${record.suhun}°C` : ''}
+
+DATA UJI LABORATORIUM
+─────────────────────────────────────────────────────────────────────
+Status Uji Lab      : ${record.ulabo}
+${record.ulabo === 'Sudah' ? `Leukosit (WBC)      : ${record.jwbcs.toFixed(1)} x10³/μL
+Hemoglobin          : ${record.hemog.toFixed(1)} g/dL
+Hematokrit          : ${record.hemat}%
+Trombosit           : ${record.jplat} x10³/μL` : ''}
+
+GEJALA KLINIS
+─────────────────────────────────────────────────────────────────────
+[${record.skpla === 'Iya' ? '✓' : '✗'}] Sakit Kepala Parah
+[${record.nymat === 'Iya' ? '✓' : '✗'}] Nyeri Belakang Mata
+[${record.nysen === 'Iya' ? '✓' : '✗'}] Nyeri Sendi/Otot
+[${record.rsmul === 'Iya' ? '✓' : '✗'}] Rasa Logam di Mulut
+[${record.hinfm === 'Iya' ? '✓' : '✗'}] Hilang Nafsu Makan
+[${record.nyper === 'Iya' ? '✓' : '✗'}] Nyeri Perut
+[${record.mumun === 'Iya' ? '✓' : '✗'}] Mual/Muntah
+[${record.mdiar === 'Iya' ? '✓' : '✗'}] Diare
+
+INFORMASI MODEL
+─────────────────────────────────────────────────────────────────────
+Model yang digunakan menggunakan algoritma Logistic Regression untuk
+memprediksi kemungkinan DBD berdasarkan data yang dimasukkan.
+
+Varian Model: ${
+  record.model_used === 'all_data' ? 'Model Lengkap (Demam + Lab + Gejala)' :
+  record.model_used === 'fever_general_data' ? 'Model Demam (Demam + Gejala)' :
+  record.model_used === 'lab_general_data' ? 'Model Lab (Lab + Gejala)' :
+  record.model_used === 'only_general_data' ? 'Model Gejala (Hanya Gejala)' :
+  record.model_used
+}
+
+DISCLAIMER
+─────────────────────────────────────────────────────────────────────
+⚠️  PENTING: Hasil pemeriksaan ini bersifat prediktif dan tidak dapat
+    menggantikan diagnosis medis profesional. Selalu konsultasikan
+    dengan dokter untuk diagnosis yang akurat.
+
+─────────────────────────────────────────────────────────────────────
+Laporan dibuat oleh: Dengue Checker System
+Website: https://dengue-checker.vercel.app
+Waktu cetak: ${new Date().toLocaleString('id-ID', { 
+  weekday: 'long', 
+  year: 'numeric', 
+  month: 'long', 
+  day: 'numeric',
+  hour: '2-digit',
+  minute: '2-digit'
+})}
+═══════════════════════════════════════════════════════════════════════
+`.trim()
+
+                            // Create text file
+                            const blob = new Blob([report], { type: 'text/plain;charset=utf-8' })
+                            const url = URL.createObjectURL(blob)
+                            const link = document.createElement('a')
+                            link.href = url
+                            link.download = `Laporan-DBD-${item.date.replace(/\s/g, '-')}-${item.time.replace(':', '')}.txt`
+                            document.body.appendChild(link)
+                            link.click()
+                            document.body.removeChild(link)
+                            URL.revokeObjectURL(url)
+                          }}
+                          className="flex items-center justify-center gap-2 px-4 py-2 bg-gray-100 text-gray-700 rounded-lg font-medium hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2 transition-all text-sm"
+                        >
                           <svg
                             className="w-4 h-4"
                             fill="none"
