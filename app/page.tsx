@@ -3,7 +3,6 @@
 import { useEffect, useState } from 'react'
 import dynamic from 'next/dynamic'
 import Navbar from './components/Navbar'
-import { createClient } from '../utils/supabase/client'
 
 const PlotlyChart = dynamic(() => import('./components/PlotlyChart'), {
   ssr: false,
@@ -16,40 +15,21 @@ const PlotlyChart = dynamic(() => import('./components/PlotlyChart'), {
 
 export default function Home() {
   const [plotData, setPlotData] = useState<any>(null)
-  const [supabaseStatus, setSupabaseStatus] = useState<string>('Testing...')
   const [isLoadingPlot, setIsLoadingPlot] = useState<boolean>(true)
   const [isMounted, setIsMounted] = useState<boolean>(false)
 
   useEffect(() => {
     setIsMounted(true)
 
-    // Test Supabase connection
-    const testSupabase = async () => {
-      try {
-        const supabase = createClient()
-        const { error } = await supabase.auth.getSession()
-        if (error) {
-          setSupabaseStatus('❌ Error: ' + error.message)
-        } else {
-          setSupabaseStatus('✅ Supabase Connected!')
-        }
-      } catch (err) {
-        setSupabaseStatus('❌ Connection failed: ' + String(err))
-      }
-    }
-    testSupabase()
-
     // Load heatmap data
     setIsLoadingPlot(true)
     fetch('/heatmap_geo.json')
       .then((response) => response.json())
       .then((data) => {
-        console.log('Heatmap data loaded:', data)
         setPlotData(data)
         setIsLoadingPlot(false)
       })
-      .catch((error) => {
-        console.error('Error loading heatmap:', error)
+      .catch(() => {
         setIsLoadingPlot(false)
       })
   }, [])
@@ -74,7 +54,7 @@ export default function Home() {
 
               <div className="mt-8 flex flex-wrap justify-center gap-4">
                 <a
-                  className="flex gap-x-2 rounded bg-red-700 px-12 pata text-sm font-medium text-white shadow hover:bg-red-800 focus:outline-none focus:ring active:bg-red-500 sm:w-auto"
+                  className="flex gap-x-2 rounded bg-red-700 px-12 py-3 text-sm font-medium text-white shadow hover:bg-red-800 focus:outline-none focus:ring active:bg-red-500 sm:w-auto"
                   href="/form"
                 >
                   <svg
@@ -96,13 +76,29 @@ export default function Home() {
                   </svg>
                   Periksa
                 </a>
+                
+                <a
+                  className="flex gap-x-2 rounded bg-white border-2 border-red-700 px-12 py-3 text-sm font-medium text-red-700 shadow hover:bg-red-50 focus:outline-none focus:ring active:bg-red-100 sm:w-auto"
+                  href="/login"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="w-5 h-5"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4" />
+                    <polyline points="10 17 15 12 10 7" />
+                    <line x1="15" x2="3" y1="12" y2="12" />
+                  </svg>
+                  Masuk
+                </a>
               </div>
             </div>
-          </div>
-          {/* Supabase Test Status */}
-          <div className="bg-blue-50 border-b border-blue-200 px-4 py-2 text-center text-sm">
-            <span className="font-semibold">Supabase Status:</span>{' '}
-            {supabaseStatus}
           </div>
         </section>
       </div>

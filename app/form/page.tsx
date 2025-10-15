@@ -44,10 +44,10 @@ function Step1() {
         <span> Deteksi DBD hanya dengan </span>
         <span className="text-red-700"> beberapa pertanyaan saja! </span>
       </div>
-      <div className="flex gap-x-8">
+      <div className="flex flex-col gap-4">
         <Link
           href="/form?step=1"
-          className="flex gap-x-2 rounded bg-red-700 px-6 py-3 text-sm font-medium text-white shadow hover:bg-red-800 focus:outline-none focus:ring active:bg-red-500 sm:w-auto"
+          className="flex gap-x-2 rounded bg-red-700 px-6 py-3 text-sm font-medium text-white shadow hover:bg-red-800 focus:outline-none focus:ring active:bg-red-500 sm:w-auto justify-center"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -65,6 +65,30 @@ function Step1() {
           </svg>
           Isi sebagai anonim
         </Link>
+
+        <div className="text-center">
+          <p className="text-sm text-gray-600 mb-2">atau</p>
+          <Link
+            href="/login"
+            className="flex gap-x-2 rounded bg-white border-2 border-red-700 px-6 py-3 text-sm font-medium text-red-700 shadow hover:bg-red-50 focus:outline-none focus:ring active:bg-red-100 sm:w-auto justify-center"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="w-5 h-5"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4" />
+              <polyline points="10 17 15 12 10 7" />
+              <line x1="15" x2="3" y1="12" y2="12" />
+            </svg>
+            Masuk dengan akun
+          </Link>
+        </div>
       </div>
     </div>
   )

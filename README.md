@@ -1,11 +1,40 @@
 # Dengue Checker - Next.js
 
-Aplikasi deteksi Demam Berdarah Dengue (DBD) menggunakan Next.js dan TypeScript.
+Aplikasi deteksi Demam Berdarah Dengue (DBD) menggunakan Next.js dan TypeScript dengan autentikasi Supabase.
 
 ## Instalasi
 
 ```bash
 bun install
+```
+
+## Konfigurasi Supabase
+
+### 1. Setup Supabase Project
+
+1. Buat project baru di [Supabase](https://app.supabase.com)
+2. Aktifkan Google OAuth Provider:
+   - Buka **Authentication** > **Providers**
+   - Enable **Google** provider
+   - Masukkan Google OAuth credentials (Client ID & Secret)
+   - Tambahkan redirect URL: `http://localhost:3000/auth/callback` (untuk development)
+
+### 2. Konfigurasi Environment Variables
+
+Salin file `.env.local.example` menjadi `.env.local`:
+
+```bash
+cp .env.local.example .env.local
+```
+
+Isi dengan kredensial dari Supabase project Anda:
+- Buka project di [Supabase Dashboard](https://app.supabase.com)
+- Pergi ke **Settings** > **API**
+- Salin **Project URL** dan **anon public key**
+
+```env
+NEXT_PUBLIC_SUPABASE_URL=your_supabase_url_here
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key_here
 ```
 
 ## Konfigurasi Model
