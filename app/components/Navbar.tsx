@@ -6,7 +6,7 @@ import { createClient } from '../../utils/supabase/client'
 import { User } from '@supabase/supabase-js'
 
 interface NavbarProps {
-  active: 'home' | 'form' | 'login'
+  active: 'home' | 'form' | 'login' | 'history'
 }
 
 export default function Navbar({ active }: NavbarProps) {
@@ -218,6 +218,38 @@ export default function Navbar({ active }: NavbarProps) {
                 Periksa
               </Link>
             </li>
+            {user && (
+              <li>
+                <Link
+                  href="/history"
+                  className={
+                    active === 'history' ? activeList : `${regularList} group`
+                  }
+                  aria-current="page"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className={`w-5 h-5 ${
+                      active === 'history'
+                        ? 'text-red-600'
+                        : 'text-gray-900 group-hover:text-red-700'
+                    }`}
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8" />
+                    <path d="M21 3v5h-5" />
+                    <path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16" />
+                    <path d="M8 16H3v5" />
+                  </svg>
+                  Riwayat
+                </Link>
+              </li>
+            )}
             {!user && (
               <li>
                 <Link

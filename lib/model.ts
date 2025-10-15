@@ -1,7 +1,7 @@
 // Model weights dan normalizer
 export const normalizer = {
-  mean: [0, 0, 0, 0, 0, 0], // Ganti dengan nilai mean dari normalizer.joblib
-  std: [1, 1, 1, 1, 1, 1], // Ganti dengan nilai std dari normalizer.joblib
+  mean: [5.4414062, 102.583984, 3.0473957, 13.312175, 32.052082, 95.52734], // Ganti dengan nilai mean dari normalizer.joblib
+  std: [2.2206898, 1.3689892, 1.1779854, 3.1176934, 7.264704, 27.897495], // Ganti dengan nilai std dari normalizer.joblib
 }
 
 // Logistic Regression coefficients dan intercept
@@ -147,4 +147,19 @@ export function predictDengue(formData: FormData): number {
 
   const probability = sigmoid(z)
   return probability >= 0.5 ? 1 : 0 // 1 = dengue, 0 = tidak dengue
+}
+
+export function getModelName(formData: FormData): string {
+  const isDemam = formData.KDEMA === 'Iya'
+  const isUjiLab = formData.ULABO === 'Sudah'
+
+  if (isDemam && isUjiLab) {
+    return 'all_data'
+  } else if (isDemam && !isUjiLab) {
+    return 'fever_general_data'
+  } else if (!isDemam && isUjiLab) {
+    return 'lab_general_data'
+  } else {
+    return 'only_general_data'
+  }
 }

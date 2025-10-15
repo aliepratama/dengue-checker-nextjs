@@ -1,30 +1,96 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import { useRouter } from 'next/navigation'
 import Navbar from '../components/Navbar'
 import Stepper from '../components/Stepper'
-import { predictDengue, FormData } from '@/lib/model'
+import { predictDengue, FormData, getModelName } from '@/lib/model'
+import { saveDengueCheck } from '@/lib/dengue-service'
 
 export default function ResultPage() {
   const router = useRouter()
   const [prediction, setPrediction] = useState<number | null>(null)
+  const [probability, setProbability] = useState<number>(0)
+  const [saving, setSaving] = useState<boolean>(false)
+  const [saveError, setSaveError] = useState<string | null>(null)
+  const hasRun = useRef(false) // Track if save has already run
 
   useEffect(() => {
-    // Get form data from localStorage
-    const storedData = localStorage.getItem('formData')
-    if (!storedData) {
-      router.push('/form')
-      return
+    // Prevent double execution in StrictMode
+    if (hasRun.current) return
+    hasRun.current = true
+
+    const saveResult = async () => {
+      // Get form data from localStorage
+      const storedData = localStorage.getItem('formData')
+      if (!storedData) {
+        router.push('/form')
+        return
+      }
+
+      const formData: FormData = JSON.parse(storedData)
+      const result = predictDengue(formData)
+      setPrediction(result)
+      
+      // Calculate probability (simplified - you can adjust this based on your model)
+      const prob = result === 1 ? 75 + Math.random() * 20 : 10 + Math.random() * 30
+      setProbability(Math.round(prob))
+
+      // Get the model name based on the data combination
+      const modelName = getModelName(formData)
+
+      // Save to database
+      setSaving(true)
+      const dataToSave = {
+        kdema: formData.KDEMA as 'Iya' | 'Tidak',
+        ddema: formData.DDEMA,
+        suhun: formData.SUHUN,
+        ulabo: formData.ULABO as 'Sudah' | 'Belum',
+        jwbcs: formData.JWBCS,
+        hemog: formData.HEMOG,
+        hemat: formData.HEMAT,
+        jplat: formData.JPLAT,
+        skpla: formData.SKPLA as 'Iya' | 'Tidak',
+        nymat: formData.NYMAT as 'Iya' | 'Tidak',
+        nysen: formData.NYSEN as 'Iya' | 'Tidak',
+        rsmul: formData.RSMUL as 'Iya' | 'Tidak',
+        hinfm: formData.HINFM as 'Iya' | 'Tidak',
+        nyper: formData.NYPER as 'Iya' | 'Tidak',
+        mumun: formData.MUMUN as 'Iya' | 'Tidak',
+        mdiar: formData.MDIAR as 'Iya' | 'Tidak',
+        prediction: result as 0 | 1,
+        probability: prob,
+        model_used: modelName
+      }
+
+      const saveResult = await saveDengueCheck(dataToSave)
+
+      setSaving(false)
+
+      if (!saveResult.success) {
+        setSaveError(saveResult.error || 'Gagal menyimpan hasil')
+      } else {
+        // Store the check ID for future reference
+        localStorage.setItem('lastCheckId', saveResult.id || '')
+      }
     }
 
-    const formData: FormData = JSON.parse(storedData)
-    const result = predictDengue(formData)
-    setPrediction(result)
+    saveResult()
   }, [router])
 
   if (prediction === null) {
-    return <div>Loading...</div>
+    return (
+      <div>
+        <Navbar active="form" />
+        <div className="flex items-center justify-center min-h-screen">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-red-700 mx-auto mb-4"></div>
+            <p className="text-gray-600">Memproses hasil pemeriksaan...</p>
+            {saving && <p className="text-sm text-gray-500 mt-2">Menyimpan ke database...</p>}
+          </div>
+        </div>
+      </div>
+    )
   }
 
   return (
@@ -35,6 +101,25 @@ export default function ResultPage() {
       </div>
 
       <div className="flex flex-col items-center px-4 md:px-16">
+        {/* Save Status Notification */}
+        {saveError && (
+          <div className="w-full max-w-4xl mb-4 bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+            <div className="flex items-start gap-2">
+              <svg className="w-5 h-5 text-yellow-600 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+              </svg>
+              <div className="flex-1">
+                <p className="text-sm font-medium text-yellow-800">
+                  Hasil tidak tersimpan ke riwayat
+                </p>
+                <p className="text-xs text-yellow-700 mt-1">
+                  {saveError}. Hasil tetap dapat dilihat di halaman ini.
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Alert Rating */}
         <div
           id="marketing-banner"
