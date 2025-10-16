@@ -2,8 +2,8 @@ import { SVC } from 'scikitjs'
 
 // Model weights dan normalizer (tidak ada perubahan di sini)
 export const normalizer = {
-  mean: [5.4414062, 102.583984, 3.0473957, 13.312175, 32.052082, 95.52734],
-  std: [2.2206898, 1.3689892, 1.1779854, 3.1176934, 7.264704, 27.897495],
+  mean: [5.4414062, 102.583984, 3.0473957, 13.312175, 32.052082, 95.52734], // Ganti dengan nilai mean dari normalizer.joblib
+  std: [2.2206898, 1.3689892, 1.1779854, 3.1176934, 7.264704, 27.897495], // Ganti dengan nilai std dari normalizer.joblib
 }
 
 // Kumpulan parameter untuk semua model, sekarang dengan tipe
@@ -140,6 +140,21 @@ export async function predictDengue(formData: FormData): Promise<number> {
     return probability >= 0.5 ? 1 : 0 // 1 = dengue, 0 = tidak dengue
   }
 
-  // Fallback jika tipe model tidak dikenali
-  return -1
+  const probability = sigmoid(z)
+  return probability >= 0.5 ? 1 : 0 // 1 = dengue, 0 = tidak dengue
+}
+
+export function getModelName(formData: FormData): string {
+  const isDemam = formData.KDEMA === 'Iya'
+  const isUjiLab = formData.ULABO === 'Sudah'
+
+  if (isDemam && isUjiLab) {
+    return 'all_data'
+  } else if (isDemam && !isUjiLab) {
+    return 'fever_general_data'
+  } else if (!isDemam && isUjiLab) {
+    return 'lab_general_data'
+  } else {
+    return 'only_general_data'
+  }
 }
