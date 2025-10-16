@@ -4,11 +4,14 @@ import { useEffect, useState } from 'react'
 import dynamic from 'next/dynamic'
 import Navbar from './components/Navbar'
 
-const PlotlyChart = dynamic(() => import('./components/PlotlyChart'), {
+const LeafletMap = dynamic(() => import('./components/LeafletMap'), {
   ssr: false,
   loading: () => (
     <div className="flex items-center justify-center h-full">
-      <p className="text-gray-500">Loading Plotly...</p>
+      <div className="text-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-red-700 mx-auto mb-4"></div>
+        <p className="text-gray-500">Memuat komponen peta...</p>
+      </div>
     </div>
   ),
 })
@@ -26,10 +29,12 @@ export default function Home() {
     fetch('/heatmap_geo.json')
       .then((response) => response.json())
       .then((data) => {
+        console.log('Heatmap data loaded successfully')
         setPlotData(data)
         setIsLoadingPlot(false)
       })
-      .catch(() => {
+      .catch((err) => {
+        console.error('Failed to load heatmap data:', err)
         setIsLoadingPlot(false)
       })
   }, [])
@@ -104,36 +109,47 @@ export default function Home() {
       </div>
 
       <section className="py-2 md:py-16">
-        <div
-          id="chart"
-          className="chart mx-auto w-full lg:w-3/4 px-8"
-          style={{ minHeight: 600, height: 600, width: '100%' }}
-        >
-          {isLoadingPlot && (
-            <div className="flex items-center justify-center h-full">
-              <p className="text-gray-500">Loading chart...</p>
-            </div>
-          )}
-          {!isLoadingPlot && !plotData && (
-            <div className="flex items-center justify-center h-full">
-              <p className="text-red-500">Failed to load chart data</p>
-            </div>
-          )}
-          {!isLoadingPlot && plotData && isMounted && (
-            <PlotlyChart
-              data={plotData.data}
-              layout={{
-                ...plotData.layout,
-                title: {
-                  ...plotData.layout.title,
-                  font: {
-                    family: 'General Sans, sans-serif',
-                  },
-                  automargin: true,
-                },
-              }}
-            />
-          )}
+        <div className="mx-auto max-w-screen-xl px-4">
+          <div className="text-center mb-8">
+            <h2 className="text-3xl font-bold text-gray-900 mb-4">
+              Peta Sebaran DBD di Indonesia
+            </h2>
+            <p className="text-gray-600">
+              Visualisasi data kasus DBD berdasarkan lokasi geografis
+            </p>
+          </div>
+          
+          <div
+            id="chart"
+            className="chart mx-auto w-full bg-white rounded-lg shadow-lg p-4"
+            style={{ minHeight: 600, height: 600, width: '100%' }}
+          >
+            {isLoadingPlot && (
+              <div className="flex items-center justify-center h-full">
+                <div className="text-center">
+                  <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-red-700 mx-auto mb-4"></div>
+                  <p className="text-gray-500">Memuat peta Indonesia...</p>
+                </div>
+              </div>
+            )}
+            {!isLoadingPlot && !plotData && (
+              <div className="flex items-center justify-center h-full">
+                <div className="text-center">
+                  <svg className="w-16 h-16 text-red-500 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                  </svg>
+                  <p className="text-red-500 font-medium">Gagal memuat data peta</p>
+                  <p className="text-gray-500 text-sm mt-2">Silakan refresh halaman atau coba lagi nanti</p>
+                </div>
+              </div>
+            )}
+            {!isLoadingPlot && plotData && isMounted && (
+              <LeafletMap
+                data={plotData.data}
+                layout={plotData.layout}
+              />
+            )}
+          </div>
         </div>
       </section>
     </div>
