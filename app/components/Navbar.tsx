@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
 import { createClient } from '../../utils/supabase/client'
 import { User } from '@supabase/supabase-js'
@@ -12,6 +12,9 @@ interface NavbarProps {
 export default function Navbar({ active }: NavbarProps) {
   const [isOpen, setIsOpen] = useState(false)
   const [user, setUser] = useState<User | null>(null)
+  const [showDropdown, setShowDropdown] = useState(false)
+  const [userName, setUserName] = useState<string>('')
+  const dropdownRef = useRef<HTMLDivElement>(null)
   const supabase = createClient()
 
   useEffect(() => {
@@ -21,6 +24,22 @@ export default function Navbar({ active }: NavbarProps) {
         data: { user },
       } = await supabase.auth.getUser()
       setUser(user)
+      
+      // Get user's full name from user_profiles
+      if (user) {
+        const { data: profile } = await supabase
+          .from('user_profiles')
+          .select('full_name')
+          .eq('id', user.id)
+          .single()
+        
+        if (profile?.full_name) {
+          setUserName(profile.full_name)
+        } else {
+          // Fallback to email username if no full name
+          setUserName(user.email?.split('@')[0] || 'User')
+        }
+      }
     }
     getUser()
 
@@ -29,14 +48,43 @@ export default function Navbar({ active }: NavbarProps) {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((_event, session) => {
       setUser(session?.user ?? null)
+      if (!session?.user) {
+        setUserName('')
+      }
     })
 
     return () => subscription.unsubscribe()
   }, [supabase])
 
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setShowDropdown(false)
+      }
+    }
+
+    if (showDropdown) {
+      document.addEventListener('mousedown', handleClickOutside)
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside)
+    }
+  }, [showDropdown])
+
   const handleSignOut = async () => {
     await supabase.auth.signOut()
     window.location.href = '/'
+  }
+
+  // Get initials from full name
+  const getInitials = (name: string) => {
+    const names = name.trim().split(' ')
+    if (names.length === 1) {
+      return names[0].substring(0, 2).toUpperCase()
+    }
+    return (names[0][0] + names[names.length - 1][0]).toUpperCase()
   }
 
   const activeList =
@@ -57,37 +105,90 @@ export default function Navbar({ active }: NavbarProps) {
             <img src="/uty_logo.png" className="h-10" alt="UTY Logo" />
           </a>
         </div>
-        <div className="flex md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
+        <div className="flex md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse gap-3">
           {user ? (
-            <div className="flex items-center gap-3">
-              <span className="text-sm text-gray-700 hidden md:block">
-                {user.email}
-              </span>
+            <div className="relative" ref={dropdownRef}>
               <button
-                onClick={handleSignOut}
-                className="flex gap-x-2 text-white bg-gray-700 hover:bg-gray-800 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-4 py-2 text-center"
+                onClick={() => setShowDropdown(!showDropdown)}
+                onMouseEnter={() => setShowDropdown(true)}
+                className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-gray-100 transition-colors"
               >
+                {/* Avatar with Initials */}
+                <div className="w-9 h-9 rounded-full bg-red-600 flex items-center justify-center text-white font-bold text-sm">
+                  {getInitials(userName)}
+                </div>
+                {/* User Name - Hidden on mobile */}
+                <span className="text-sm font-medium text-gray-700 hidden md:block max-w-[150px] truncate">
+                  {userName}
+                </span>
+                {/* Dropdown Icon */}
                 <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="w-5 h-5"
-                  viewBox="0 0 24 24"
+                  className={`w-4 h-4 text-gray-500 transition-transform ${showDropdown ? 'rotate-180' : ''}`}
                   fill="none"
                   stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
+                  viewBox="0 0 24 24"
                 >
-                  <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
-                  <polyline points="16 17 21 12 16 7" />
-                  <line x1="21" x2="9" y1="12" y2="12" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                 </svg>
-                Keluar
               </button>
+
+              {/* Dropdown Menu */}
+              {showDropdown && (
+                <div 
+                  className="absolute right-0 mt-2 w-64 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-50"
+                  onMouseLeave={() => setShowDropdown(false)}
+                >
+                  {/* Greeting */}
+                  <div className="px-4 py-3 border-b border-gray-100">
+                    <p className="text-sm text-gray-500">Halo,</p>
+                    <p className="text-base font-semibold text-gray-900 truncate">{userName}</p>
+                    <p className="text-xs text-gray-400 truncate mt-1">{user.email}</p>
+                  </div>
+
+                  {/* Menu Items */}
+                  <div className="py-1">
+                    <Link
+                      href="/history"
+                      className="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+                      onClick={() => setShowDropdown(false)}
+                    >
+                      <svg className="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8M21 3v5h-5M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16M8 16H3v5" />
+                      </svg>
+                      Riwayat Pemeriksaan
+                    </Link>
+                    
+                    <Link
+                      href="/form"
+                      className="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+                      onClick={() => setShowDropdown(false)}
+                    >
+                      <svg className="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                      </svg>
+                      Pemeriksaan Baru
+                    </Link>
+                  </div>
+
+                  {/* Logout Button */}
+                  <div className="border-t border-gray-100 mt-1 pt-1">
+                    <button
+                      onClick={handleSignOut}
+                      className="flex items-center gap-3 px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors w-full"
+                    >
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                      </svg>
+                      Keluar Akun
+                    </button>
+                  </div>
+                </div>
+              )}
             </div>
           ) : (
             <Link
-              href="/login"
-              className="flex gap-x-2 text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-4 py-2 text-center dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800"
+              href="/form"
+              className="flex gap-x-2 items-center text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-4 py-2 text-center dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -99,33 +200,16 @@ export default function Navbar({ active }: NavbarProps) {
                 strokeLinecap="round"
                 strokeLinejoin="round"
               >
-                <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4" />
-                <polyline points="10 17 15 12 10 7" />
-                <line x1="15" x2="3" y1="12" y2="12" />
+                <path d="M3 7V5a2 2 0 0 1 2-2h2" />
+                <path d="M17 3h2a2 2 0 0 1 2 2v2" />
+                <path d="M21 17v2a2 2 0 0 1-2 2h-2" />
+                <path d="M7 21H5a2 2 0 0 1-2-2v-2" />
+                <circle cx="12" cy="12" r="1" />
+                <path d="M18.944 12.33a1 1 0 0 0 0-.66 7.5 7.5 0 0 0-13.888 0 1 1 0 0 0 0 .66 7.5 7.5 0 0 0 13.888 0" />
               </svg>
-              Masuk
+              Coba Sekarang
             </Link>
           )}
-          <Link
-            href="/form"
-            className="flex gap-x-2 text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-4 py-2 text-center dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="text-white w-5 h-5"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <path d="M2 12a5 5 0 0 0 5 5 8 8 0 0 1 5 2 8 8 0 0 1 5-2 5 5 0 0 0 5-5V7h-5a8 8 0 0 0-5 2 8 8 0 0 0-5-2H2Z" />
-              <path d="M6 11c1.5 0 3 .5 3 2-2 0-3 0-3-2Z" />
-              <path d="M18 11c-1.5 0-3 .5-3 2 2 0 3 0 3-2Z" />
-            </svg>
-            Coba Sekarang
-          </Link>
           <button
             onClick={() => setIsOpen(!isOpen)}
             type="button"
