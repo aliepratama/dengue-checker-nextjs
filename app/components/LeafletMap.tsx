@@ -47,13 +47,13 @@ function HeatmapLayer({ points }: { points: [number, number, number][] }) {
           }
         }
 
-        // Create heatmap with very visible settings
+        // Create heatmap with smaller, more precise points
         const heatmapLayer = (L as any).heatLayer(points, {
-          radius: 40,           // Larger radius for visibility
-          blur: 30,             // Moderate blur
+          radius: 6,           // Smaller radius for more precise visualization
+          blur: 3,             // Less blur for sharper points
           maxZoom: 18,          
           max: 1.0,
-          minOpacity: 0.7,      // High minimum opacity
+          minOpacity: 0.5,      // Lower opacity for better visibility
           gradient: {           // Bright yellow to red gradient
             0.0: '#ffff00',     // Bright yellow
             0.2: '#ffdd00',
