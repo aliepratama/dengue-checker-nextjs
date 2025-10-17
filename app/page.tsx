@@ -395,6 +395,11 @@ export default function Home() {
                   </Link>
                 </li>
                 <li>
+                  <Link href="/about" className="text-gray-400 hover:text-white transition-colors">
+                    Tentang
+                  </Link>
+                </li>
+                <li>
                   <Link href="/history" className="text-gray-400 hover:text-white transition-colors">
                     Riwayat
                   </Link>
