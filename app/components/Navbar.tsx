@@ -93,16 +93,16 @@ export default function Navbar({ active }: NavbarProps) {
     'flex gap-x-2 py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-red-700 md:p-0'
 
   return (
-    <nav className="bg-white dark:bg-white fixed w-full z-20 top-0 start-0 border-2 border-gray-200">
+    <nav className="bg-white dark:bg-white fixed w-full z-50 top-0 start-0 border-2 border-gray-200">
       <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
         <div className="flex items-center space-x-3 rtl:space-x-reverse w-fit">
           <a
-            href="https://uty.ac.id/"
+            href="/"
             className="flex items-center space-x-3 rtl:space-x-reverse"
             target="_blank"
             rel="noopener noreferrer"
           >
-            <img src="/uty_logo.png" className="h-10" alt="UTY Logo" />
+            <img src="/dengue.png" className="h-10" alt="Logo" />
           </a>
         </div>
         <div className="flex md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse gap-3">

@@ -39,7 +39,6 @@ export default function RegisterPage() {
 
       if (error) throw error
     } catch (error: any) {
-      console.error('Google auth error:', error)
       setLoading(false)
     }
   }

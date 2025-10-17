@@ -23,12 +23,9 @@ export default function PlotlyChart({ data, layout }: PlotlyChartProps) {
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
-    console.log('PlotlyChart mounted with data:', data)
-    
     // Wait for Plotly to be available
     const checkPlotly = setInterval(() => {
       if (typeof window !== 'undefined' && (window as any).Plotly) {
-        console.log('Plotly library ready')
         setIsReady(true)
         clearInterval(checkPlotly)
       }
@@ -81,7 +78,6 @@ export default function PlotlyChart({ data, layout }: PlotlyChartProps) {
         style={{ width: '100%', height: '100%' }}
         useResizeHandler={true}
         onInitialized={(figure: any, graphDiv: any) => {
-          console.log('Plot initialized successfully', graphDiv)
           // Force a resize after initialization
           setTimeout(() => {
             try {
@@ -90,12 +86,11 @@ export default function PlotlyChart({ data, layout }: PlotlyChartProps) {
                 Plotly.Plots.resize(graphDiv)
               }
             } catch (e) {
-              console.error('Resize error:', e)
+              // Ignore resize errors
             }
           }, 100)
         }}
-        onError={(error: any) => {
-          console.error('Plot error:', error)
+        onError={() => {
           setError('Failed to render chart')
         }}
       />

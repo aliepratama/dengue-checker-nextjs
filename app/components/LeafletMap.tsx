@@ -15,15 +15,8 @@ function HeatmapLayer({ points }: { points: [number, number, number][] }) {
 
   useEffect(() => {
     if (!map || !points || points.length === 0) {
-      console.log('⚠️ HeatmapLayer: No map or no points', {
-        hasMap: !!map,
-        pointsCount: points?.length
-      })
       return
     }
-
-    console.log('🗺️ HeatmapLayer: Initializing with', points.length, 'points')
-    console.log('📍 First 3 points:', points.slice(0, 3))
 
     let mounted = true
 
@@ -35,15 +28,12 @@ function HeatmapLayer({ points }: { points: [number, number, number][] }) {
 
         if (!mounted) return
 
-        console.log('✅ Leaflet.heat loaded')
-
         // Remove old layer if exists
         if (layerRef.current) {
           try {
             map.removeLayer(layerRef.current)
-            console.log('🗑️ Removed old heatmap layer')
           } catch (e) {
-            console.log('Could not remove old layer:', e)
+            // Ignore error if layer already removed
           }
         }
 
@@ -67,10 +57,8 @@ function HeatmapLayer({ points }: { points: [number, number, number][] }) {
         layerRef.current = heatmapLayer
         heatmapLayer.addTo(map)
 
-        console.log('🎉 Heatmap layer added to map successfully!')
-
       } catch (error) {
-        console.error('❌ Error loading heatmap:', error)
+        // Silently handle error
       }
     }
 
@@ -96,10 +84,7 @@ export default function LeafletMap({ data, layout }: LeafletMapProps) {
   const [points, setPoints] = useState<[number, number, number][]>([])
 
   useEffect(() => {
-    console.log('🔄 LeafletMap: Processing data...')
-    
     if (!data || !data[0]) {
-      console.error('❌ No data provided to LeafletMap')
       return
     }
 
@@ -107,15 +92,8 @@ export default function LeafletMap({ data, layout }: LeafletMapProps) {
     const { lat, lon, z } = trace
 
     if (!lat || !lon || !z) {
-      console.error('❌ Missing lat, lon, or z in data')
       return
     }
-
-    console.log('📊 Data info:', {
-      latCount: lat.length,
-      lonCount: lon.length,
-      zCount: z.length
-    })
 
     // Process points
     const processedPoints: [number, number, number][] = []
@@ -125,9 +103,6 @@ export default function LeafletMap({ data, layout }: LeafletMapProps) {
       const intensity = z[i] === 1 ? 1.0 : 0.5
       processedPoints.push([lat[i], lon[i], intensity])
     }
-
-    console.log('✅ Processed', processedPoints.length, 'points for heatmap')
-    console.log('📍 Sample:', processedPoints.slice(0, 3))
     
     setPoints(processedPoints)
   }, [data])
