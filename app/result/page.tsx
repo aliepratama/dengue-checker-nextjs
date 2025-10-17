@@ -29,12 +29,9 @@ export default function ResultPage() {
       }
 
       const formData: FormData = JSON.parse(storedData)
-      const result = predictDengue(formData)
+      const result = await predictDengue(formData)
       setPrediction(result)
-      
-      // Calculate probability (simplified - you can adjust this based on your model)
-      const prob = result === 1 ? 75 + Math.random() * 20 : 10 + Math.random() * 30
-      setProbability(Math.round(prob))
+      setProbability(Math.round(result * 100))
 
       // Get the model name based on the data combination
       const modelName = getModelName(formData)
@@ -59,7 +56,7 @@ export default function ResultPage() {
         mumun: formData.MUMUN as 'Iya' | 'Tidak',
         mdiar: formData.MDIAR as 'Iya' | 'Tidak',
         prediction: result as 0 | 1,
-        probability: prob,
+        probability: result * 100,
         model_used: modelName
       }
 

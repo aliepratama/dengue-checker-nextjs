@@ -187,7 +187,7 @@ export default function Navbar({ active }: NavbarProps) {
             </div>
           ) : (
             <Link
-              href="/form"
+              href="/login"
               className="flex gap-x-2 items-center text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-4 py-2 text-center dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800"
             >
               <svg
@@ -200,14 +200,11 @@ export default function Navbar({ active }: NavbarProps) {
                 strokeLinecap="round"
                 strokeLinejoin="round"
               >
-                <path d="M3 7V5a2 2 0 0 1 2-2h2" />
-                <path d="M17 3h2a2 2 0 0 1 2 2v2" />
-                <path d="M21 17v2a2 2 0 0 1-2 2h-2" />
-                <path d="M7 21H5a2 2 0 0 1-2-2v-2" />
-                <circle cx="12" cy="12" r="1" />
-                <path d="M18.944 12.33a1 1 0 0 0 0-.66 7.5 7.5 0 0 0-13.888 0 1 1 0 0 0 0 .66 7.5 7.5 0 0 0 13.888 0" />
+                <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4" />
+                <polyline points="10 17 15 12 10 7" />
+                <line x1="15" x2="3" y1="12" y2="12" />
               </svg>
-              Coba Sekarang
+              Masuk
             </Link>
           )}
           <button
@@ -331,37 +328,6 @@ export default function Navbar({ active }: NavbarProps) {
                     <path d="M8 16H3v5" />
                   </svg>
                   Riwayat
-                </Link>
-              </li>
-            )}
-            {!user && (
-              <li>
-                <Link
-                  href="/login"
-                  className={
-                    active === 'login' ? activeList : `${regularList} group`
-                  }
-                  aria-current="page"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className={`w-5 h-5 ${
-                      active === 'login'
-                        ? 'text-red-600'
-                        : 'text-gray-900 group-hover:text-red-700'
-                    }`}
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  >
-                    <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4" />
-                    <polyline points="10 17 15 12 10 7" />
-                    <line x1="15" x2="3" y1="12" y2="12" />
-                  </svg>
-                  Masuk
                 </Link>
               </li>
             )}
