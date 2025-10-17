@@ -140,8 +140,8 @@ export async function predictDengue(formData: FormData): Promise<number> {
     return probability >= 0.5 ? 1 : 0 // 1 = dengue, 0 = tidak dengue
   }
 
-  const probability = sigmoid(z)
-  return probability >= 0.5 ? 1 : 0 // 1 = dengue, 0 = tidak dengue
+  // Default fallback (should not reach here)
+  return 0
 }
 
 export function getModelName(formData: FormData): string {
