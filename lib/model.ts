@@ -1,6 +1,4 @@
-import { SVC } from 'scikitjs'
-
-// Model weights dan normalizer (tidak ada perubahan di sini)
+// Model weights dan normalizer
 export const normalizer = {
   mean: [5.4414062, 102.583984, 3.0473957, 13.312175, 32.052082, 95.52734], // Ganti dengan nilai mean dari normalizer.joblib
   std: [2.2206898, 1.3689892, 1.1779854, 3.1176934, 7.264704, 27.897495], // Ganti dengan nilai std dari normalizer.joblib
@@ -62,7 +60,7 @@ export interface FormData {
   MDIAR: string // diare
 }
 
-export async function predictDengue(formData: FormData): Promise<number> {
+export function predictDengue(formData: FormData): number {
   const isDemam = formData.KDEMA === 'Iya'
   const isUjiLab = formData.ULABO === 'Sudah'
 
@@ -113,25 +111,36 @@ export async function predictDengue(formData: FormData): Promise<number> {
 
   // --- BAGIAN PREDIKSI YANG DIPERBARUI ---
   if (model.type === 'svm') {
-    // Membuat instance SVC baru
-    const svc = new SVC()
-
-    // "Memuat" model yang sudah dilatih dengan mengatur parameternya
-    // @ts-ignore - Mengabaikan pemeriksaan tipe karena kita memuat parameter secara manual
-    svc.support_vectors_ = model.support_vectors_
-    // @ts-ignore
-    svc.dual_coef_ = model.dual_coef_
-    // @ts-ignore
-    svc.intercept_ = model.intercept_
-    // @ts-ignore - Penting untuk menentukan jumlah fitur
-    svc.n_features_in_ = features.length
-
-    // Melakukan prediksi. Input harus berupa array 2D.
-    const prediction = await svc.predict([features])
-    return prediction[0] // Mengembalikan hasil prediksi (0 atau 1)
+    // Manual SVM prediction using RBF kernel
+    // Implementasi prediksi SVM secara manual
+    const supportVectors = model.support_vectors_
+    const dualCoef = model.dual_coef_[0]
+    const intercept = model.intercept_[0]
+    
+    // RBF kernel calculation
+    const gamma = 0.1 // Default gamma value, adjust if needed
+    let decisionValue = intercept
+    
+    for (let i = 0; i < supportVectors.length; i++) {
+      const sv = supportVectors[i]
+      let squaredDistance = 0
+      
+      // Calculate squared Euclidean distance
+      for (let j = 0; j < features.length; j++) {
+        const diff = features[j] - sv[j]
+        squaredDistance += diff * diff
+      }
+      
+      // RBF kernel: exp(-gamma * ||x - x'||^2)
+      const kernelValue = Math.exp(-gamma * squaredDistance)
+      decisionValue += dualCoef[i] * kernelValue
+    }
+    
+    // Return prediction: 1 if decision value >= 0, else 0
+    return decisionValue >= 0 ? 1 : 0
 
   } else if (model.type === 'logistic') {
-    // Logika untuk regresi logistik (tetap sama seperti sebelumnya)
+    // Logika untuk regresi logistik
     let z = model.intercept[0]
     for (let i = 0; i < features.length; i++) {
       z += model.coef[0][i] * features[i]
@@ -140,8 +149,8 @@ export async function predictDengue(formData: FormData): Promise<number> {
     return probability >= 0.5 ? 1 : 0 // 1 = dengue, 0 = tidak dengue
   }
 
-  const probability = sigmoid(z)
-  return probability >= 0.5 ? 1 : 0 // 1 = dengue, 0 = tidak dengue
+  // Fallback (should not reach here)
+  return 0
 }
 
 export function getModelName(formData: FormData): string {

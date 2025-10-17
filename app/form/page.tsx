@@ -145,7 +145,24 @@ function Step2() {
         type="submit"
         className="flex items-center justify-center gap-x-2 px-4 py-2 text-sm font-medium text-white bg-red-700 border border-transparent rounded-md shadow-sm hover:bg-red-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
       >
-        <img src="/scan-search.svg" alt="Submit Icon" className="w-5 h-5" />
+        {/* <img src="/scan-search.svg" alt="Submit Icon" className="w-5 h-5" /> */}
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          className="w-5 h-5"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
+          <path d="M3 7V5a2 2 0 0 1 2-2h2"/>
+          <path d="M17 3h2a2 2 0 0 1 2 2v2"/>
+          <path d="M21 17v2a2 2 0 0 1-2 2h-2"/>
+          <path d="M7 21H5a2 2 0 0 1-2-2v-2"/>
+          <circle cx="12" cy="12" r="3"/>
+          <path d="m16 16-1.9-1.9"/>
+        </svg>
         <span className="text-nowrap">Periksa</span>
       </button>
     </form>
@@ -184,7 +201,18 @@ function FormGejalaUtama({ formData, setFormData }: FormProps) {
           href="#form-gejala-tambahan"
           className="flex h-fit items-center justify-center gap-x-2 px-4 py-2 text-sm font-medium text-white bg-red-700 border border-transparent rounded-md shadow-sm hover:bg-red-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
         >
-          <img src="/arrow-right.svg" alt="Next Icon" className="w-5 h-5" />
+          <svg 
+            xmlns="http://www.w3.org/2000/svg" 
+            viewBox="0 0 24 24" 
+            fill="none"
+            stroke="currentColor" 
+            strokeWidth="2" 
+            strokeLinecap="round" 
+            strokeLinejoin="round" 
+            className="w-5 h-5">
+              <path d="M5 12h14"/>
+              <path d="m12 5 7 7-7 7"/>
+          </svg>
           <span className="text-nowrap">Lanjut</span>
         </a>
       </div>
@@ -203,34 +231,38 @@ function FormGejalaUtama({ formData, setFormData }: FormProps) {
               </p>
             </label>
           </div>
-          <ul className="items-center text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg sm:flex">
-            {['Iya', 'Tidak'].map((choice, index) => (
-              <li
-                key={choice}
-                className="w-full border-b border-gray-200 sm:border-b-0 sm:border-r"
-              >
-                <div className="flex items-center px-8">
-                  <input
-                    id={`kdema-${index}`}
-                    type="radio"
-                    value={choice}
-                    name="KDEMA"
-                    checked={formData.KDEMA === choice}
-                    onChange={(e) =>
-                      setFormData({ ...formData, KDEMA: e.target.value })
-                    }
-                    className="w-4 h-4 text-red-600 bg-gray-100 border-gray-300 focus:ring-red-500"
-                  />
-                  <label
-                    htmlFor={`kdema-${index}`}
-                    className="w-full py-3 ms-2 text-sm font-medium text-gray-900"
-                  >
-                    {choice}
-                  </label>
+            <ul className="w-1/4 items-center text-sm font-medium bg-white rounded-lg sm:flex">
+            {['Iya', 'Tidak'].map((choice, index) => {
+              const checked = formData.KDEMA === choice
+              return (
+              <li key={choice} className="w-full rounded-lg border border-gray-200">
+                <div
+                className={`flex items-center px-8 transition-colors duration-200 rounded-lg ${
+                  checked ? 'bg-red-700 text-white' : 'bg-white text-gray-900'
+                }`}
+                >
+                <input
+                  id={`kdema-${index}`}
+                  type="radio"
+                  value={choice}
+                  name="KDEMA"
+                  checked={checked}
+                  onChange={(e) =>
+                  setFormData({ ...formData, KDEMA: e.target.value })
+                  }
+                  className="hidden"
+                />
+                <label
+                  htmlFor={`kdema-${index}`}
+                  className="w-full py-3 text-center text-sm font-medium cursor-pointer"
+                >
+                  {choice}
+                </label>
                 </div>
               </li>
-            ))}
-          </ul>
+              )
+            })}
+            </ul>
         </div>
 
         <div className="grid gap-6 md:grid-cols-2">
@@ -369,7 +401,18 @@ function FormGejalaTambahan({ formData, setFormData }: FormProps) {
           href="#form-uji-lab"
           className="flex h-fit items-center justify-center gap-x-2 px-4 py-2 text-sm font-medium text-white bg-red-700 border border-transparent rounded-md shadow-sm hover:bg-red-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
         >
-          <img src="/arrow-right.svg" alt="Next Icon" className="w-5 h-5" />
+          <svg 
+            xmlns="http://www.w3.org/2000/svg" 
+            viewBox="0 0 24 24" 
+            fill="none"
+            stroke="currentColor" 
+            strokeWidth="2" 
+            strokeLinecap="round" 
+            strokeLinejoin="round" 
+            className="w-5 h-5">
+              <path d="M5 12h14"/>
+              <path d="m12 5 7 7-7 7"/>
+          </svg>
           <span className="text-nowrap">Lanjut</span>
         </a>
       </div>
@@ -388,36 +431,43 @@ function FormGejalaTambahan({ formData, setFormData }: FormProps) {
                     <p className="font-normal text-gray-700">{symptom.desc}</p>
                   </label>
                 </div>
-                <ul className="w-full items-center text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg sm:flex">
-                  {['Iya', 'Tidak'].map((choice, index) => (
-                    <li
-                      key={choice}
-                      className="w-full border-b border-gray-200 sm:border-b-0 sm:border-r"
-                    >
-                      <div className="flex items-center px-8">
-                        <input
-                          id={`${symptom.code}-${index}`}
-                          type="radio"
-                          value={choice}
-                          name={symptom.code}
-                          checked={formData[symptom.code] === choice}
-                          onChange={(e) =>
-                            setFormData({
-                              ...formData,
-                              [symptom.code]: e.target.value,
-                            })
-                          }
-                          className="w-4 h-4 text-red-600 bg-gray-100 border-gray-300 focus:ring-red-500"
-                        />
-                        <label
-                          htmlFor={`${symptom.code}-${index}`}
-                          className="w-full py-3 ms-2 text-sm font-medium text-gray-900"
+                <ul className="w-full items-center text-sm font-medium bg-white border border-gray-200 rounded-lg sm:flex">
+                  {['Iya', 'Tidak'].map((choice, index) => {
+                    const checked = formData[symptom.code] === choice
+                    return (
+                      <li
+                        key={choice}
+                        className="w-full rounded-lg"
+                      >
+                        <div
+                          className={`flex items-center px-8 transition-colors duration-200 rounded-lg ${
+                            checked ? 'bg-red-700 text-white' : 'bg-white text-gray-900'
+                          }`}
                         >
-                          {choice}
-                        </label>
-                      </div>
-                    </li>
-                  ))}
+                          <input
+                            id={`${symptom.code}-${index}`}
+                            type="radio"
+                            value={choice}
+                            name={symptom.code}
+                            checked={checked}
+                            onChange={(e) =>
+                              setFormData({
+                                ...formData,
+                                [symptom.code]: e.target.value,
+                              })
+                            }
+                            className="hidden"
+                          />
+                          <label
+                            htmlFor={`${symptom.code}-${index}`}
+                            className="w-full py-3 text-center text-sm font-medium cursor-pointer"
+                          >
+                            {choice}
+                          </label>
+                        </div>
+                      </li>
+                    )
+                  })}
                 </ul>
               </div>
             ))}
@@ -464,34 +514,38 @@ function FormUjiLab({ formData, setFormData }: FormProps) {
               </p>
             </label>
           </div>
-          <ul className="items-center text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg sm:flex">
-            {['Sudah', 'Belum'].map((choice, index) => (
-              <li
-                key={choice}
-                className="w-full border-b border-gray-200 sm:border-b-0 sm:border-r"
-              >
-                <div className="flex items-center px-8">
-                  <input
-                    id={`ulabo-${index}`}
-                    type="radio"
-                    value={choice}
-                    name="ULABO"
-                    checked={formData.ULABO === choice}
-                    onChange={(e) =>
-                      setFormData({ ...formData, ULABO: e.target.value })
-                    }
-                    className="w-4 h-4 text-red-600 bg-gray-100 border-gray-300 focus:ring-red-500"
-                  />
-                  <label
-                    htmlFor={`ulabo-${index}`}
-                    className="w-full py-3 ms-2 text-sm font-medium text-gray-900"
-                  >
-                    {choice}
-                  </label>
+            <ul className="w-1/4 items-center text-sm font-medium bg-white rounded-lg sm:flex">
+            {['Sudah', 'Belum'].map((choice, index) => {
+              const checked = formData.ULABO === choice
+              return (
+              <li key={choice} className="w-full rounded-lg border border-gray-200">
+                <div
+                className={`flex items-center px-8 transition-colors duration-200 rounded-lg ${
+                  checked ? 'bg-red-700 text-white' : 'bg-white text-gray-900'
+                }`}
+                >
+                <input
+                  id={`ulabo-${index}`}
+                  type="radio"
+                  value={choice}
+                  name="ULABO"
+                  checked={checked}
+                  onChange={(e) =>
+                  setFormData({ ...formData, ULABO: e.target.value })
+                  }
+                  className="hidden"
+                />
+                <label
+                  htmlFor={`ulabo-${index}`}
+                  className="w-full py-3 text-center text-sm font-medium cursor-pointer"
+                >
+                  {choice}
+                </label>
                 </div>
               </li>
-            ))}
-          </ul>
+              )
+            })}
+            </ul>
         </div>
 
         <div className="grid gap-6 md:grid-cols-2">
