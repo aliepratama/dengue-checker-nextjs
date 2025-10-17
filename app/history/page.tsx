@@ -246,28 +246,23 @@ export default function HistoryPage() {
             )}
 
             {/* History List - Only show if data loaded */}
-            {!loading && !error && (
+            {!loading && !error && historyData.length > 0 && (
               <div className="space-y-4">
                 {filteredData.length === 0 ? (
-                <div className="bg-white rounded-lg shadow-lg p-8 text-center">
-                  <svg
-                    className="w-16 h-16 text-gray-400 mx-auto mb-4"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-                    />
-                  </svg>
-                  <p className="text-gray-600 text-lg font-medium">
-                    Tidak ada riwayat pemeriksaan
+                <div className="bg-white rounded-lg shadow-lg p-12 text-center">
+                  <img
+                    src="/dengue.png"
+                    alt="No Data"
+                    className="w-32 mx-auto mb-6 opacity-50"
+                  />
+                  <h2 className="text-2xl font-bold text-gray-900 mb-2">
+                    Tidak Ada Data
+                  </h2>
+                  <p className="text-gray-600 mb-2">
+                    Tidak ada riwayat pemeriksaan untuk filter yang dipilih
                   </p>
-                  <p className="text-gray-500 text-sm mt-2">
-                    Belum ada data untuk filter yang dipilih
+                  <p className="text-gray-500 text-sm">
+                    Coba pilih filter lain atau lakukan pemeriksaan baru
                   </p>
                 </div>
               ) : (
